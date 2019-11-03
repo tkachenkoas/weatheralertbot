@@ -93,20 +93,20 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
 
         assert underTest.willTakeCareOf(update)
 
-        ArgumentCaptor<SendMessage> messageCaptor = ArgumentCaptor.forClass(SendMessage)
+        ArgumentCaptor<SendMessage> sendMessageCaptor = ArgumentCaptor.forClass(SendMessage)
+        verify(executor, times(1)).execute(sendMessageCaptor.capture())
 
-        verify(executor, times(1)).execute(messageCaptor.capture())
-
-        SendMessage message = messageCaptor.getValue()
+        SendMessage message = sendMessageCaptor.getValue()
         assert message.getChatId() == "${getChatId(update)}"
         assert message.getText() == keybMessage
 
         InlineKeyboardMarkup markup = message.getReplyMarkup() as InlineKeyboardMarkup
         assert markup.getKeyboard().size() == 3
-        assert markup.getKeyboard().each {
-            it.size() == 1
-            it[0].text.startsWith("name")
-        }
+        assert (0..2).each({
+            def keyboard = markup.getKeyboard()[it]
+            keyboard.size() == 1
+            keyboard[0].text == "name${it+1}"
+        })
     }
 
 }
