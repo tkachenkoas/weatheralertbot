@@ -67,7 +67,7 @@ public class CityResolverUpdateProcessor extends AbstractUpdateProcessor {
 
     @Override
     protected boolean applicableFor(Update update) {
-        SubscriptionDto dto = cacheService.get(getUserId(update));
+        SubscriptionDto dto = cacheService.get(getChatId(update));
         return InitState.CITY == ofNullable(dto).map(SubscriptionDto::getState).orElse(null);
     }
 }

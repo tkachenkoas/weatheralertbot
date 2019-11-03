@@ -1,6 +1,5 @@
 package com.atstudio.volatileweatherbot.processors
 
-import com.atstudio.volatileweatherbot.SimpleSubscriptionCache
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
 import com.atstudio.volatileweatherbot.models.InitState
 import com.atstudio.volatileweatherbot.models.SubscriptionDto
@@ -17,7 +16,7 @@ import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
-import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getUserId
+import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getChatId
 import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.times
 import static org.mockito.Mockito.verify
@@ -26,7 +25,7 @@ class StartMessageUpdateProcessorTest {
 
     @Mock TgApiExecutor executor
     @Mock BotMessageProvider messageSource
-    SubscriptionCacheService cacheService = new SimpleSubscriptionCache()
+    @Mock SubscriptionCacheService cacheService
 
     StartMessageUpdateProcessor underTest
 
@@ -61,12 +60,15 @@ class StartMessageUpdateProcessorTest {
     @Test
     void willSetSubscriptionCacheToBaseState() {
         Update update = startUpdate();
-        Integer userId = getUserId(update)
+        Long chatId = getChatId(update)
 
         underTest.process(update)
 
-        SubscriptionDto dto = cacheService.get(userId)
-        assert dto?.getUserId() == userId
+        ArgumentCaptor<SubscriptionDto> dtoArgumentCaptor = ArgumentCaptor.forClass(SubscriptionDto)
+        verify(cacheService, times(1)).save(dtoArgumentCaptor.capture())
+
+        SubscriptionDto dto = dtoArgumentCaptor.getValue()
+        assert dto?.getChatId() == chatId
         assert dto?.getState() == InitState.CITY
     }
 

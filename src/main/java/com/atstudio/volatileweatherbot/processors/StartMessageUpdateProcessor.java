@@ -34,7 +34,7 @@ public class StartMessageUpdateProcessor extends AbstractUpdateProcessor {
     @Override
     protected void process(Update update) {
         subscriptionCache.save(SubscriptionDto.builder()
-                .userId(getUserId(update))
+                .chatId(getChatId(update))
                 .state(InitState.CITY)
                 .build());
 

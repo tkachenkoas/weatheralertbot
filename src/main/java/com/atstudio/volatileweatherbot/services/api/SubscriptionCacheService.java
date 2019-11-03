@@ -5,7 +5,7 @@ import com.atstudio.volatileweatherbot.models.SubscriptionDto;
 public interface SubscriptionCacheService {
 
     void save(SubscriptionDto dto);
-    void remove(Integer userId);
-    SubscriptionDto get(Integer userId);
+    void remove(Long chatId);
+    SubscriptionDto get(Long chatId);
 
 }

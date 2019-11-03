@@ -1,6 +1,5 @@
 package com.atstudio.volatileweatherbot.processors
 
-import com.atstudio.volatileweatherbot.SimpleSubscriptionCache
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
 import com.atstudio.volatileweatherbot.models.CityDto
 import com.atstudio.volatileweatherbot.models.InitState
@@ -19,14 +18,13 @@ import org.testng.annotations.Test
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
 import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getChatId
-import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getUserId
 import static org.mockito.ArgumentMatchers.any
 import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.*
 
 class CityResolverUpdateProcessorTest extends GroovyTestCase {
 
-    SubscriptionCacheService cacheService
+    @Mock SubscriptionCacheService cacheService
     @Mock BotMessageProvider messageSource
     @Mock CityResolverService cityRevolver
     @Mock TgApiExecutor executor
@@ -36,7 +34,6 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
     @BeforeMethod
     void init() {
         MockitoAnnotations.initMocks(this)
-        cacheService = new SimpleSubscriptionCache()
         underTest = new CityResolverUpdateProcessor(cacheService, messageSource, cityRevolver, executor)
     }
 
@@ -48,9 +45,9 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
     }
 
     private provideInitCityState(Update update) {
-        cacheService.save(
+        when(cacheService.get(eq(getChatId(update)))).thenReturn(
                 SubscriptionDto.builder()
-                        .userId(getUserId(update))
+                        .chatId(getChatId(update))
                         .state(InitState.CITY)
                         .build())
     }
@@ -62,7 +59,7 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
 
         cacheService.save(
                 SubscriptionDto.builder()
-                        .userId(getUserId(update))
+                        .chatId(getChatId(update))
                         .state(null)
                         .build())
 

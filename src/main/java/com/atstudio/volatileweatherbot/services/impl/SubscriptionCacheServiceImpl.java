@@ -9,25 +9,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class SubscriptionCacheServiceImpl implements SubscriptionCacheService {
 
-    private final Cache<Integer, SubscriptionDto> subscriptionCache;
+    private final Cache<Long, SubscriptionDto> subscriptionCache;
 
     @Autowired
-    public SubscriptionCacheServiceImpl(Cache<Integer, SubscriptionDto> subscriptionCache) {
+    public SubscriptionCacheServiceImpl(Cache<Long, SubscriptionDto> subscriptionCache) {
         this.subscriptionCache = subscriptionCache;
     }
 
     @Override
     public void save(SubscriptionDto dto) {
-        subscriptionCache.put(dto.getUserId(), dto);
+        subscriptionCache.put(dto.getChatId(), dto);
     }
 
     @Override
-    public void remove(Integer userId) {
-        subscriptionCache.invalidate(userId);
+    public void remove(Long chatId) {
+        subscriptionCache.invalidate(chatId);
     }
 
     @Override
-    public SubscriptionDto get(Integer userId) {
-        return subscriptionCache.getIfPresent(userId);
+    public SubscriptionDto get(Long chatId) {
+        return subscriptionCache.getIfPresent(chatId);
     }
 }

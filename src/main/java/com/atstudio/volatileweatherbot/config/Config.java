@@ -32,7 +32,7 @@ public class Config {
     }
 
     @Bean
-    public Cache<Integer, SubscriptionDto> subscriptionCache() {
+    public Cache<Long, SubscriptionDto> subscriptionCache() {
         return CacheBuilder.newBuilder()
                 .concurrencyLevel(threadCount)
                 .expireAfterAccess(10, TimeUnit.MINUTES)
@@ -43,12 +43,11 @@ public class Config {
     public MessageSource messageSource() {
         ResourceBundleMessageSource source = new ResourceBundleMessageSource();
         source.setBasenames("messages");
-        source.setUseCodeAsDefaultMessage(true);
         return source;
     }
 
     @Bean
-    public Gson prettyGsonPrinter() {
+    public Gson prettyGson() {
         return new GsonBuilder().setPrettyPrinting().create();
     }
 

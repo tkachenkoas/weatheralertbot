@@ -11,7 +11,6 @@ class UpdateFieldExtractorTest extends GroovyTestCase {
 
     class DataHolder {
         String text
-        Integer userId
         Long chatId
     }
 
@@ -19,15 +18,10 @@ class UpdateFieldExtractorTest extends GroovyTestCase {
     static Object[][] messages() {
         return [
                 [getPlainMessageUpdate("target-message"),
-                 [text: 'target-message', userId: 163655430, chatId: 163655430L] as DataHolder],
+                 [text: 'target-message', chatId: 163655430L] as DataHolder],
                 [getProcessorUpdate('with-callback-update.json'),
-                 [text: 'Source-message-text', userId: 163655430, chatId: 163655430L] as DataHolder],
+                 [text: 'Source-message-text', chatId: 163655430L] as DataHolder],
         ] as Object[][]
-    }
-
-    @Test(dataProvider = "updates")
-    void extractUserIdFromMessage(Update update, DataHolder holder) {
-        assert UpdateFieldExtractor.getUserId(update) == holder.getUserId()
     }
 
     @Test(dataProvider = "updates")

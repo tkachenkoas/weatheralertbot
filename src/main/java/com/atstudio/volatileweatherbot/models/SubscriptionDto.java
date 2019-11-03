@@ -8,7 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class SubscriptionDto {
-    private Integer userId;
+    private Long chatId;
     private InitState state;
     private String cityCode;
 }
