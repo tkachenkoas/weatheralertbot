@@ -1,26 +1,43 @@
 package com.atstudio.volatileweatherbot.services
 
-import com.atstudio.volatileweatherbot.TestJsonHelper
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
+
+import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
+import static com.atstudio.volatileweatherbot.TestJsonHelper.getProcessorUpdate
 
 class UpdateFieldExtractorTest extends GroovyTestCase {
 
-    Update update = TestJsonHelper.getPlainMessageUpdate("target-message")
-
-    @Test
-    void extractFromUserId() {
-        assert UpdateFieldExtractor.getUserId(update) == 163655430
+    class DataHolder {
+        String text
+        Integer userId
+        Long chatId
     }
 
-    @Test
-    void extractMessage() {
-        assert UpdateFieldExtractor.getMessageText(update) == 'target-message'
+    @DataProvider(name = "updates")
+    static Object[][] messages() {
+        return [
+                [getPlainMessageUpdate("target-message"),
+                 [text: 'target-message', userId: 163655430, chatId: 163655430L] as DataHolder],
+                [getProcessorUpdate('with-callback-update.json'),
+                 [text: 'Source-message-text', userId: 163655430, chatId: 163655430L] as DataHolder],
+        ] as Object[][]
     }
 
-    @Test
-    void extractChatid() {
-        assert UpdateFieldExtractor.getChatId(update) == 163655430
+    @Test(dataProvider = "updates")
+    void extractUserIdFromMessage(Update update, DataHolder holder) {
+        assert UpdateFieldExtractor.getUserId(update) == holder.getUserId()
+    }
+
+    @Test(dataProvider = "updates")
+    void extractMessage(Update update, DataHolder holder) {
+        assert UpdateFieldExtractor.getMessageText(update) == holder.getText()
+    }
+
+    @Test(dataProvider = "updates")
+    void extractChatId(Update update, DataHolder holder) {
+        assert UpdateFieldExtractor.getChatId(update) == holder.getChatId()
     }
 
 }

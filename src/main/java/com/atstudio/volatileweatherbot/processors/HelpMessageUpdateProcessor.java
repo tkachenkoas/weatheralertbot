@@ -1,7 +1,7 @@
 package com.atstudio.volatileweatherbot.processors;
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
-import com.atstudio.volatileweatherbot.services.BotMessageProvider;
+import com.atstudio.volatileweatherbot.services.api.BotMessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

@@ -1,5 +1,6 @@
 package com.atstudio.volatileweatherbot.bot;
 
+import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,20 @@ import java.io.Serializable;
 public class TgApiExecutorImpl implements TgApiExecutor {
 
     private final VolatileWeatherBot delegate;
+    private final Gson gson;
 
     @Autowired
-    public TgApiExecutorImpl(@Lazy VolatileWeatherBot delegate) {
+    public TgApiExecutorImpl(@Lazy VolatileWeatherBot delegate, Gson gson) {
         this.delegate = delegate;
+        this.gson = gson;
     }
 
     @Override
     @SneakyThrows
     public <Result extends Serializable, Method extends BotApiMethod<Result>> Result execute(Method method) {
-        log.info("Outgoing method: {}", method);
+        log.info("Outgoing method: {}", gson.toJson(method));
         Result result = delegate.execute(method);
-        log.info("Response: {}", result);
+        log.info("Response: {}", gson.toJson(result));
         return result;
     }
 }

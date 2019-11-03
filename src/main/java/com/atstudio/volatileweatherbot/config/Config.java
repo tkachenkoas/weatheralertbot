@@ -32,7 +32,7 @@ public class Config {
     }
 
     @Bean
-    public Cache<Long, SubscriptionDto> subscriptionCache() {
+    public Cache<Integer, SubscriptionDto> subscriptionCache() {
         return CacheBuilder.newBuilder()
                 .concurrencyLevel(threadCount)
                 .expireAfterAccess(10, TimeUnit.MINUTES)

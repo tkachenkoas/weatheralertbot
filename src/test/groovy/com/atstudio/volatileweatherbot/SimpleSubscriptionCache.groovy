@@ -1,7 +1,7 @@
 package com.atstudio.volatileweatherbot
 
 import com.atstudio.volatileweatherbot.models.SubscriptionDto
-import com.atstudio.volatileweatherbot.services.SubscriptionCacheService
+import com.atstudio.volatileweatherbot.services.api.SubscriptionCacheService
 
 class SimpleSubscriptionCache implements SubscriptionCacheService {
 

@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.services;
+package com.atstudio.volatileweatherbot.services.api;
 
 public interface BotMessageProvider {
 

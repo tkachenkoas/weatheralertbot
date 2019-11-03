@@ -3,8 +3,8 @@ package com.atstudio.volatileweatherbot.processors;
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
 import com.atstudio.volatileweatherbot.models.InitState;
 import com.atstudio.volatileweatherbot.models.SubscriptionDto;
-import com.atstudio.volatileweatherbot.services.BotMessageProvider;
-import com.atstudio.volatileweatherbot.services.SubscriptionCacheService;
+import com.atstudio.volatileweatherbot.services.api.BotMessageProvider;
+import com.atstudio.volatileweatherbot.services.api.SubscriptionCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,7 +18,7 @@ import static java.util.Arrays.asList;
 @Component
 public class StartMessageUpdateProcessor extends AbstractUpdateProcessor {
 
-    private static List<String> MESSAGES = asList("/start", "/subscribe");
+    private static List<String> INIT_SUBSCRIPTION_MESSAGES = asList("/start", "/subscribe");
 
     private final TgApiExecutor executor;
     private final BotMessageProvider messageSource;
@@ -46,6 +46,6 @@ public class StartMessageUpdateProcessor extends AbstractUpdateProcessor {
 
     @Override
     protected boolean applicableFor(Update update) {
-        return MESSAGES.contains(getMessageText(update));
+        return INIT_SUBSCRIPTION_MESSAGES.contains(getMessageText(update));
     }
 }

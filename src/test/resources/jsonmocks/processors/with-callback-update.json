@@ -1,0 +1,44 @@
+{
+  "updateId": 414360126,
+  "callbackQuery": {
+    "id": "702894721002064406",
+    "from": {
+      "id": 163655430,
+      "firstName": "Anton",
+      "isBot": false,
+      "lastName": "Tkachenko",
+      "userName": "tkachenkoas",
+      "languageCode": "en"
+    },
+    "message": {
+      "messageId": 42,
+      "from": {
+        "id": 1017274652,
+        "firstName": "VolatileWeatherBotTest",
+        "isBot": true,
+        "userName": "volatile_test_bot"
+      },
+      "date": 1572797072,
+      "chat": {
+        "id": 163655430,
+        "type": "private",
+        "firstName": "Anton",
+        "lastName": "Tkachenko",
+        "userName": "tkachenkoas"
+      },
+      "text": "Source-message-text",
+      "replyMarkup": {
+        "keyboard": [
+          [
+            {
+              "text": "Displayed qZYOoMq",
+              "callbackData": "qZYOoMq"
+            }
+          ]
+        ]
+      }
+    },
+    "data": "qZYOoMq",
+    "chatInstance": "-5708356086558283152"
+  }
+}

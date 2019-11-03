@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.services;
+package com.atstudio.volatileweatherbot.services.api;
 
 import com.atstudio.volatileweatherbot.models.SubscriptionDto;
 

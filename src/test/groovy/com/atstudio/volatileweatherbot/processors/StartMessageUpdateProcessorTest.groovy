@@ -4,15 +4,15 @@ import com.atstudio.volatileweatherbot.SimpleSubscriptionCache
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
 import com.atstudio.volatileweatherbot.models.InitState
 import com.atstudio.volatileweatherbot.models.SubscriptionDto
-import com.atstudio.volatileweatherbot.services.BotMessageProvider
-import com.atstudio.volatileweatherbot.services.SubscriptionCacheService
+import com.atstudio.volatileweatherbot.services.api.BotMessageProvider
+import com.atstudio.volatileweatherbot.services.api.SubscriptionCacheService
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
-import org.testng.annotations.BeforeClass
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 
@@ -30,7 +30,7 @@ class StartMessageUpdateProcessorTest {
 
     StartMessageUpdateProcessor underTest
 
-    @BeforeClass
+    @BeforeMethod
     void init() {
         MockitoAnnotations.initMocks(this)
         underTest = new StartMessageUpdateProcessor(executor, messageSource, cacheService)

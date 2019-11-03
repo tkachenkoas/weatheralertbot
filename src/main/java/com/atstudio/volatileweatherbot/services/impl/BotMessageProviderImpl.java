@@ -1,5 +1,6 @@
-package com.atstudio.volatileweatherbot.services;
+package com.atstudio.volatileweatherbot.services.impl;
 
+import com.atstudio.volatileweatherbot.services.api.BotMessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
