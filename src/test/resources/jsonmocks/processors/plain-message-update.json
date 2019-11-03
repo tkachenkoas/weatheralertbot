@@ -18,7 +18,7 @@
       "lastName": "Tkachenko",
       "userName": "tkachenkoas"
     },
-    "text": "/help",
+    "text": "PLAIN_MESSAGE_TEXT",
     "entities": [
       {
         "type": "bot_command",

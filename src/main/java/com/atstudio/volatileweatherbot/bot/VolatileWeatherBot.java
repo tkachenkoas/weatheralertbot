@@ -2,6 +2,7 @@ package com.atstudio.volatileweatherbot.bot;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,10 +16,12 @@ public class VolatileWeatherBot extends TelegramLongPollingBot {
     private String botToken;
 
     private final UpdateHandler handler;
+    private final TaskExecutor updateExecutor;
 
     @Autowired
-    public VolatileWeatherBot(UpdateHandler handler) {
+    public VolatileWeatherBot(UpdateHandler handler, TaskExecutor updateExecutor) {
         this.handler = handler;
+        this.updateExecutor = updateExecutor;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class VolatileWeatherBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        handler.handle(update);
+        updateExecutor.execute(() -> handler.handle(update));
     }
 
 }

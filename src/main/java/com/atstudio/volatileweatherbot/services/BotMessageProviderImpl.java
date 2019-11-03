@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.common;
+package com.atstudio.volatileweatherbot.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
