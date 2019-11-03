@@ -14,6 +14,7 @@
               <option value="verify" />
               <option value="-DskipTests" />
               <option value="spring-boot:run" />
+              <option value="-Dspring-boot.run.fork=false" />
             </list>
           </option>
           <option name="pomFileName" />
