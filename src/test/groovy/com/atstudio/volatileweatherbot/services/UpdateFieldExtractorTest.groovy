@@ -5,7 +5,7 @@ import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
-import static com.atstudio.volatileweatherbot.TestJsonHelper.getProcessorUpdate
+import static com.atstudio.volatileweatherbot.TestJsonHelper.getUpdateFromFile
 
 class UpdateFieldExtractorTest extends GroovyTestCase {
 
@@ -19,7 +19,7 @@ class UpdateFieldExtractorTest extends GroovyTestCase {
         return [
                 [getPlainMessageUpdate("target-message"),
                  [text: 'target-message', chatId: 163655430L] as DataHolder],
-                [getProcessorUpdate('with-callback-update.json'),
+                [getUpdateFromFile('with-callback-update.json'),
                  [text: 'Source-message-text', chatId: 163655430L] as DataHolder],
         ] as Object[][]
     }

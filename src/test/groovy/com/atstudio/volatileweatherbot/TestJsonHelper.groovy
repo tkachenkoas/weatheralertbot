@@ -6,12 +6,12 @@ import org.telegram.telegrambots.meta.api.objects.Update
 class TestJsonHelper {
 
     static Update getPlainMessageUpdate(String message = 'default-message') {
-        Update update = getProcessorUpdate('plain-message-update.json')
+        Update update = getUpdateFromFile('plain-message-update.json')
         update.message.text = message
         return update
     }
 
-    static Update getProcessorUpdate(String fileName) {
+    static Update getUpdateFromFile(String fileName) {
         return new JsonSlurper().parse(
                 this.getResourceAsStream("/jsonmocks/processors/${fileName}") as InputStream
         ) as Update

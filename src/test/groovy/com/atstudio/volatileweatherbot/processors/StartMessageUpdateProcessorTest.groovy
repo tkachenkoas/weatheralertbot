@@ -1,10 +1,8 @@
 package com.atstudio.volatileweatherbot.processors
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
-import com.atstudio.volatileweatherbot.models.InitState
-import com.atstudio.volatileweatherbot.models.SubscriptionDto
+import com.atstudio.volatileweatherbot.services.api.AlertInitStateProcessingService
 import com.atstudio.volatileweatherbot.services.api.BotMessageProvider
-import com.atstudio.volatileweatherbot.services.api.SubscriptionCacheService
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -16,7 +14,6 @@ import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
-import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getChatId
 import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.times
 import static org.mockito.Mockito.verify
@@ -25,14 +22,14 @@ class StartMessageUpdateProcessorTest {
 
     @Mock TgApiExecutor executor
     @Mock BotMessageProvider messageSource
-    @Mock SubscriptionCacheService cacheService
+    @Mock AlertInitStateProcessingService stateProcessingService
 
     StartMessageUpdateProcessor underTest
 
     @BeforeMethod
     void init() {
         MockitoAnnotations.initMocks(this)
-        underTest = new StartMessageUpdateProcessor(executor, messageSource, cacheService)
+        underTest = new StartMessageUpdateProcessor(executor, messageSource, stateProcessingService)
     }
 
     @DataProvider(name="startSubscribe")
@@ -56,22 +53,6 @@ class StartMessageUpdateProcessorTest {
         assert message.getChatId() == "${update.message.chatId}"
         assert message.getText() == text
     }
-
-    @Test
-    void willSetSubscriptionCacheToBaseState() {
-        Update update = startUpdate();
-        Long chatId = getChatId(update)
-
-        underTest.process(update)
-
-        ArgumentCaptor<SubscriptionDto> dtoArgumentCaptor = ArgumentCaptor.forClass(SubscriptionDto)
-        verify(cacheService, times(1)).save(dtoArgumentCaptor.capture())
-
-        SubscriptionDto dto = dtoArgumentCaptor.getValue()
-        assert dto?.getChatId() == chatId
-        assert dto?.getState() == InitState.CITY
-    }
-
 
     @Test(dataProvider = "startSubscribe")
     void isApplicableToStartAndSubscribeUpdates(String message) {

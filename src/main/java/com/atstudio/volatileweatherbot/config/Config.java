@@ -1,6 +1,7 @@
 package com.atstudio.volatileweatherbot.config;
 
-import com.atstudio.volatileweatherbot.models.SubscriptionDto;
+import com.atstudio.volatileweatherbot.models.AlertInitDto;
+import com.atstudio.volatileweatherbot.repository.AlertRepository;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.gson.Gson;
@@ -32,7 +33,7 @@ public class Config {
     }
 
     @Bean
-    public Cache<Long, SubscriptionDto> subscriptionCache() {
+    public Cache<Long, AlertInitDto> subscriptionCache() {
         return CacheBuilder.newBuilder()
                 .concurrencyLevel(threadCount)
                 .expireAfterAccess(10, TimeUnit.MINUTES)
@@ -49,6 +50,12 @@ public class Config {
     @Bean
     public Gson prettyGson() {
         return new GsonBuilder().setPrettyPrinting().create();
+    }
+
+    @Bean
+    public AlertRepository repository() {
+        // TODO implement logic
+        return alert -> alert;
     }
 
 }
