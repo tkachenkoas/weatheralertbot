@@ -1,6 +1,5 @@
-package com.atstudio.volatileweatherbot.services
+package com.atstudio.volatileweatherbot.services.util
 
-import com.atstudio.volatileweatherbot.services.util.UpdateFieldExtractor
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test

@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.processors
+package com.atstudio.volatileweatherbot.services
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider

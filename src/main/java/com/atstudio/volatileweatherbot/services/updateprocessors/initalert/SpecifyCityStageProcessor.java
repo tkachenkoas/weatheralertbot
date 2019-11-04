@@ -45,7 +45,7 @@ public class SpecifyCityStageProcessor extends AbstractInitStageProcessor {
     protected AlertInitDto startPhase(Update update, AlertInitDto initDto) {
         executor.execute(
                 new SendMessage(
-                        getChatId(update),
+                        initDto.getChatId(),
                         messageSource.getMessage("specify-city")
                 )
         );
