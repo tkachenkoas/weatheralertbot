@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.services.impl
+package com.atstudio.volatileweatherbot.services.updateprocessors.initalert
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
 import com.atstudio.volatileweatherbot.models.AlertInitDto
@@ -7,52 +7,38 @@ import com.atstudio.volatileweatherbot.models.InitStage
 import com.atstudio.volatileweatherbot.models.WeatherAlert
 import com.atstudio.volatileweatherbot.repository.AlertRepository
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
-import com.google.common.cache.Cache
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.objects.Update
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.*
 
-class AlertInitStageProcessingServiceImplTest {
+class SaveAlertStageProcessorTest {
 
-    @Mock Cache<Long, AlertInitDto> cache;
     @Mock AlertRepository repository;
     @Mock TgApiExecutor executor;
     @Mock BotMessageProvider messageProvider;
 
-    AlertInitStateProcessingServiceImpl underTest;
+    SaveAlertStageProcessor underTest;
 
     @BeforeMethod
     void init() {
         MockitoAnnotations.initMocks(this)
-        underTest = new AlertInitStateProcessingServiceImpl(cache, repository, executor, messageProvider)
+        underTest = new SaveAlertStageProcessor(repository, executor, messageProvider)
     }
 
     @Test
-    void willInitDtoStateAndStoreToCache() {
-        AlertInitDto dto = new AlertInitDto(chatId)
-        dto.setChatId(1234L)
-
-        underTest.storeForProcessing(dto)
-
-        ArgumentCaptor<AlertInitDto> dtoArgumentCaptor = ArgumentCaptor.forClass(AlertInitDto)
-        verify(cache, times(1)).put(eq(dto.getChatId()), dtoArgumentCaptor.capture())
-        AlertInitDto cached = dtoArgumentCaptor.getValue()
-        assert cached.getStage() == InitStage.SPECIFY_CITY
-    }
-
-    @Test
-    void willSaveToRepoWhenDone() {
-        AlertInitDto dto = new AlertInitDto(chatId)
-        dto.setChatId(1234L)
-        dto.nextStage(InitStage.READY_TO_SAVE)
+    void willSaveToRepoAndSendChatMessageWhenDone() {
+        AlertInitDto dto = new AlertInitDto(1234L)
+        dto.setStage(InitStage.READY_TO_SAVE)
         dto.setCity(
                 [
+                        cityCode: 'city',
                         lat: 10.0,
                         lng: 20.0
                 ] as CityDto
@@ -61,7 +47,7 @@ class AlertInitStageProcessingServiceImplTest {
         def chatText = "Alert was created"
         when(messageProvider.getMessage(eq("alert-created"))).thenReturn(chatText)
 
-        underTest.storeForProcessing(dto)
+        underTest.process(new Update(), dto)
 
         ArgumentCaptor<SendMessage> sendMessageCaptor = ArgumentCaptor.forClass(SendMessage)
         verify(executor, times(1)).execute(sendMessageCaptor.capture())
@@ -73,8 +59,10 @@ class AlertInitStageProcessingServiceImplTest {
         verify(repository, times(1)).save(alertCaptor.capture())
         WeatherAlert stored = alertCaptor.getValue()
         assert stored.getChatId() == dto.getChatId()
-        assert stored.getLat() == dto.getCity().getLat()
-        assert stored.getLng() == dto.getCity().getLng()
+        assert stored.getCityCode() == 'city'
+        assert stored.getLat() == 10.0
+        assert stored.getLng() == 20.0
     }
+
 
 }
