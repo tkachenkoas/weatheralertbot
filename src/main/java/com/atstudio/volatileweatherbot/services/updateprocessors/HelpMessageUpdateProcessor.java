@@ -1,14 +1,14 @@
-package com.atstudio.volatileweatherbot.processors;
+package com.atstudio.volatileweatherbot.services.updateprocessors;
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
-import com.atstudio.volatileweatherbot.services.api.BotMessageProvider;
+import com.atstudio.volatileweatherbot.services.util.BotMessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getChatId;
-import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getMessageText;
+import static com.atstudio.volatileweatherbot.services.util.UpdateFieldExtractor.getChatId;
+import static com.atstudio.volatileweatherbot.services.util.UpdateFieldExtractor.getMessageText;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 @Component

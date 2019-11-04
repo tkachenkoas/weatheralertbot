@@ -2,7 +2,7 @@ package com.atstudio.volatileweatherbot.processors
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
 import com.atstudio.volatileweatherbot.services.api.AlertInitStateProcessingService
-import com.atstudio.volatileweatherbot.services.api.BotMessageProvider
+import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -32,12 +32,6 @@ class StartMessageUpdateProcessorTest {
         underTest = new StartMessageUpdateProcessor(executor, messageSource, stateProcessingService)
     }
 
-    @DataProvider(name="startSubscribe")
-    static Object[][] messages() {
-        return [["/subscribe"], ["/start"]] as Object[][]
-    }
-
-
     @Test
     void processingWillSendCityMessage() {
         String text = "Specify-city-text"
@@ -54,10 +48,7 @@ class StartMessageUpdateProcessorTest {
         assert message.getText() == text
     }
 
-    @Test(dataProvider = "startSubscribe")
-    void isApplicableToStartAndSubscribeUpdates(String message) {
-        assert underTest.applicableFor(getPlainMessageUpdate(message))
-    }
+
 
     Update startUpdate() {
         return getPlainMessageUpdate('/start')

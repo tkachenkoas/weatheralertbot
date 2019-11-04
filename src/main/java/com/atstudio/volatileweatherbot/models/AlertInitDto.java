@@ -1,24 +1,26 @@
 package com.atstudio.volatileweatherbot.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class AlertInitDto {
-    private Long chatId;
-    private InitState state;
+    private final Long chatId;
 
     private List<CityDto> matchedCities;
     private CityDto city;
 
-    public void nextState() {
-        this.setState(state.next());
+    private InitStage stage;
+    private StagePhase phase;
+
+    public AlertInitDto(Long chatId) {
+        this.chatId = chatId;
+        nextStage();
+    }
+
+    public void nextStage() {
+        this.stage = InitStage.next(stage);
+        this.phase = StagePhase.STARTED;
     }
 }

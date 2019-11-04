@@ -1,7 +1,6 @@
-package com.atstudio.volatileweatherbot.services.impl;
+package com.atstudio.volatileweatherbot.services.external;
 
 import com.atstudio.volatileweatherbot.models.CityDto;
-import com.atstudio.volatileweatherbot.services.api.CityResolverService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,6 +28,6 @@ public class CityResolverServiceImpl implements CityResolverService {
             result.setScale(4, BigDecimal.ROUND_HALF_DOWN);
             return result;
         };
-        return new CityDto("Displayed " + code, rndBigDecimal.get(), rndBigDecimal.get());
+        return new CityDto("Displayed " + code, code, rndBigDecimal.get(), rndBigDecimal.get());
     }
 }

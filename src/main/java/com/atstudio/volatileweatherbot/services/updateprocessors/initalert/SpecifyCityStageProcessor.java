@@ -1,12 +1,11 @@
-package com.atstudio.volatileweatherbot.processors;
+package com.atstudio.volatileweatherbot.services.updateprocessors.initalert;
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
 import com.atstudio.volatileweatherbot.models.AlertInitDto;
 import com.atstudio.volatileweatherbot.models.CityDto;
-import com.atstudio.volatileweatherbot.models.InitState;
-import com.atstudio.volatileweatherbot.services.api.AlertInitStateProcessingService;
-import com.atstudio.volatileweatherbot.services.api.BotMessageProvider;
-import com.atstudio.volatileweatherbot.services.api.CityResolverService;
+import com.atstudio.volatileweatherbot.models.InitStage;
+import com.atstudio.volatileweatherbot.services.util.BotMessageProvider;
+import com.atstudio.volatileweatherbot.services.external.CityResolverService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -18,62 +17,74 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.Collections;
 import java.util.List;
 
-import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getChatId;
-import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getMessageText;
-import static java.util.Optional.ofNullable;
+import static com.atstudio.volatileweatherbot.services.util.UpdateFieldExtractor.getChatId;
+import static com.atstudio.volatileweatherbot.services.util.UpdateFieldExtractor.getMessageText;
 import static java.util.stream.Collectors.toList;
 
 @Service
-public class CityResolverUpdateProcessor extends AbstractUpdateProcessor {
+public class SpecifyCityStageProcessor extends AbstractInitStageProcessor {
 
-    private final AlertInitStateProcessingService stateProcessingService;
     private final BotMessageProvider messageSource;
     private final CityResolverService cityRevolver;
     private final TgApiExecutor executor;
 
-    public CityResolverUpdateProcessor(AlertInitStateProcessingService stateProcessingService,
-                                       BotMessageProvider messageSource,
-                                       CityResolverService cityRevolver,
-                                       TgApiExecutor executor) {
-        this.stateProcessingService = stateProcessingService;
+    public SpecifyCityStageProcessor(BotMessageProvider messageSource,
+                                     CityResolverService cityRevolver,
+                                     TgApiExecutor executor) {
         this.messageSource = messageSource;
         this.cityRevolver = cityRevolver;
         this.executor = executor;
     }
 
     @Override
-    protected void process(Update update) {
-        AlertInitDto dto = stateProcessingService.get(getChatId(update));
+    public InitStage applicableForStage() {
+        return InitStage.SPECIFY_CITY;
+    }
+
+    @Override
+    protected AlertInitDto startPhase(Update update, AlertInitDto initDto) {
+        executor.execute(
+                new SendMessage(
+                        getChatId(update),
+                        messageSource.getMessage("specify-city")
+                )
+        );
+        return onProcessingPhase(initDto);
+    }
+
+    @Override
+    protected AlertInitDto processingPhase(Update update, AlertInitDto initDto) {
         CallbackQuery callback = update.getCallbackQuery();
         if (callback != null) {
-            resolveCityFromCallback(dto, callback);
-            return;
+            return resolveCityFromCallback(initDto, callback);
         }
+
         String city = getMessageText(update);
         List<CityDto> matchedCities = cityRevolver.getCities(city);
         if (matchedCities.size() == 1) {
-            dto.setCity(matchedCities.get(0));
-            stateProcessingService.storeForProcessing(dto);
-        } else {
-            dto.setMatchedCities(matchedCities);
-            executor.execute(
-                    new SendMessage()
-                            .setChatId(getChatId(update))
-                            .setText(messageSource.getMessage("city-guess", new Object[]{city}))
-                            .setReplyMarkup(getReplyMarkup(matchedCities))
-            );
-            stateProcessingService.storeForProcessing(dto);
+            return resolveCityForDto(initDto, matchedCities.get(0));
         }
+
+        initDto.setMatchedCities(matchedCities);
+        executor.execute(
+                new SendMessage(
+                        getChatId(update), messageSource.getMessage("city-guess", new Object[]{city})
+                ).setReplyMarkup(getReplyMarkup(matchedCities))
+        );
+        return onProcessingPhase(initDto);
     }
 
-    private void resolveCityFromCallback(AlertInitDto dto, CallbackQuery callback) {
+    private AlertInitDto resolveCityFromCallback(AlertInitDto dto, CallbackQuery callback) {
         String cityHash = callback.getData();
         CityDto city = dto.getMatchedCities().stream()
                 .filter(cityDto -> cityDto.hashed().equals(cityHash))
                 .findFirst().orElseThrow(() -> new IllegalStateException("City not found by provided hash!"));
-        dto.setCity(city);
-        dto.nextState();
-        stateProcessingService.storeForProcessing(dto);
+        return resolveCityForDto(dto, city);
+    }
+
+    private AlertInitDto resolveCityForDto(AlertInitDto alertInitDto, CityDto city) {
+        alertInitDto.setCity(city);
+        return doneProcessing(alertInitDto);
     }
 
     private ReplyKeyboard getReplyMarkup(List<CityDto> guessedCities) {
@@ -89,9 +100,4 @@ public class CityResolverUpdateProcessor extends AbstractUpdateProcessor {
                 );
     }
 
-    @Override
-    protected boolean applicableFor(Update update) {
-        AlertInitDto dto = stateProcessingService.get(getChatId(update));
-        return InitState.CITY == ofNullable(dto).map(AlertInitDto::getState).orElse(null);
-    }
 }

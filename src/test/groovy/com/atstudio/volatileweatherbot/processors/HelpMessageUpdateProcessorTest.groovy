@@ -1,7 +1,8 @@
 package com.atstudio.volatileweatherbot.processors
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
-import com.atstudio.volatileweatherbot.services.api.BotMessageProvider
+import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
+import com.atstudio.volatileweatherbot.services.updateprocessors.HelpMessageUpdateProcessor
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito

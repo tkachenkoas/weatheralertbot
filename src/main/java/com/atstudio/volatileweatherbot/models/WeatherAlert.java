@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class WeatherAlert {
     private Long chatId;
+    private String cityCode;
     private BigDecimal lat;
     private BigDecimal lng;
 }

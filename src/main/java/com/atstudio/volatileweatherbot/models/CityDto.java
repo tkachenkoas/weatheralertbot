@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CityDto {
     private String displayedName;
+    private String cityCode;
     private BigDecimal lat;
     private BigDecimal lng;
 

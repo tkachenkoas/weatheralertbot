@@ -3,10 +3,11 @@ package com.atstudio.volatileweatherbot.processors
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
 import com.atstudio.volatileweatherbot.models.AlertInitDto
 import com.atstudio.volatileweatherbot.models.CityDto
-import com.atstudio.volatileweatherbot.models.InitState
+import com.atstudio.volatileweatherbot.models.InitStage
+import com.atstudio.volatileweatherbot.services.processors.initalert.SpecifyCityStageProcessor
 import com.atstudio.volatileweatherbot.services.api.AlertInitStateProcessingService
-import com.atstudio.volatileweatherbot.services.api.BotMessageProvider
-import com.atstudio.volatileweatherbot.services.api.CityResolverService
+import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
+import com.atstudio.volatileweatherbot.services.external.CityResolverService
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
@@ -18,13 +19,13 @@ import org.testng.annotations.Test
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getUpdateFromFile
-import static com.atstudio.volatileweatherbot.services.UpdateFieldExtractor.getChatId
-import static com.atstudio.volatileweatherbot.services.impl.CityResolverServiceImpl.rndCity
+import static com.atstudio.volatileweatherbot.services.util.UpdateFieldExtractor.getChatId
+import static com.atstudio.volatileweatherbot.services.external.CityResolverServiceImpl.rndCity
 import static org.mockito.ArgumentMatchers.any
 import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.*
 
-class CityResolverUpdateProcessorTest extends GroovyTestCase {
+class SpecifyCityStageProcessorTest extends GroovyTestCase {
 
     @Mock
     AlertInitStateProcessingService stateProcessingService
@@ -35,12 +36,12 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
     @Mock
     TgApiExecutor executor
 
-    CityResolverUpdateProcessor underTest
+    SpecifyCityStageProcessor underTest
 
     @BeforeMethod
     void init() {
         MockitoAnnotations.initMocks(this)
-        underTest = new CityResolverUpdateProcessor(stateProcessingService, messageSource, cityRevolver, executor)
+        underTest = new SpecifyCityStageProcessor(messageSource, cityRevolver, executor)
     }
 
     @Test
@@ -58,11 +59,8 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
     }
 
     private provideInitCityState(Long chatId) {
-        when(stateProcessingService.get(eq(chatId))).thenReturn(
-                AlertInitDto.builder()
-                        .chatId(chatId)
-                        .state(InitState.CITY)
-                        .build())
+        when(stateProcessingService.get(eq(chatId)))
+                .thenReturn(new AlertInitDto(chatId))
     }
 
     @Test
@@ -73,7 +71,7 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
         when(stateProcessingService.get(eq(getChatId(update)))).thenReturn(
                 AlertInitDto.builder()
                         .chatId(getChatId(update))
-                        .state(InitState.DONE)
+                        .stage(InitStage.READY_TO_SAVE)
                         .build())
 
         assert !underTest.applicableFor(update)
@@ -146,7 +144,7 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
 
         AlertInitDto startDto = AlertInitDto.builder()
                 .chatId(getChatId(update))
-                .state(InitState.CITY)
+                .stage(InitStage.SPECIFY_CITY)
                 .matchedCities(cityGuesses)
                 .build()
 
@@ -159,7 +157,7 @@ class CityResolverUpdateProcessorTest extends GroovyTestCase {
 
         AlertInitDto targetDto = dtoArgumentCaptor.getValue()
         assert targetDto.getChatId() == startDto.getChatId()
-        assert targetDto.getState() == InitState.DONE
+        assert targetDto.getStage() == InitStage.READY_TO_SAVE
         assert targetDto.getCity() == cityGuesses[1]
     }
 

@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.processors;
+package com.atstudio.volatileweatherbot.services.updateprocessors;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 

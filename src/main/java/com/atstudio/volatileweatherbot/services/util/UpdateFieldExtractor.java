@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.services;
+package com.atstudio.volatileweatherbot.services.util;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
