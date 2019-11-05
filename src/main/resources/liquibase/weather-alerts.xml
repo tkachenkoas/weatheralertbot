@@ -6,15 +6,21 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="anton">
-        <createTable tableName="t_weather_alerts" schemaName="">
-            <column name="id" type="NUMBER(19,0)"/>
-            <column name="chatId" type="NUMBER(19,0)"/>
-            <column name="cityId" type="VARCHAR(128)"/>
+        <createTable tableName="t_weather_alerts">
+            <column name="chat_id" type="NUMBER(19,0)"/>
+            <column name="city_code" type="VARCHAR(128)"/>
             <column name="lat" type="NUMBER(19,6)"/>
             <column name="lng" type="NUMBER(19,6)"/>
         </createTable>
         <rollback>
             <dropTable tableName="t_weather_alerts"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="2" author="anton">
+        <addUniqueConstraint tableName="t_weather_alerts" constraintName="WA_CHAT_CITY" columnNames="chat_id,city_code"/>
+        <rollback>
+            <dropUniqueConstraint tableName="t_weather_alerts" constraintName="WA_CHAT_CITY"/>
         </rollback>
     </changeSet>
 

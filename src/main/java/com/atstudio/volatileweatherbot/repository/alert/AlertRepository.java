@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.repository;
+package com.atstudio.volatileweatherbot.repository.alert;
 
 import com.atstudio.volatileweatherbot.models.WeatherAlert;
 

@@ -4,7 +4,7 @@ import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
 import com.atstudio.volatileweatherbot.models.AlertInitDto;
 import com.atstudio.volatileweatherbot.models.InitStage;
 import com.atstudio.volatileweatherbot.models.WeatherAlert;
-import com.atstudio.volatileweatherbot.repository.AlertRepository;
+import com.atstudio.volatileweatherbot.repository.alert.AlertRepository;
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

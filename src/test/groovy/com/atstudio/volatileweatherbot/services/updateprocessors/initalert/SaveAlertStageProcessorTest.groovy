@@ -5,7 +5,7 @@ import com.atstudio.volatileweatherbot.models.AlertInitDto
 import com.atstudio.volatileweatherbot.models.CityDto
 import com.atstudio.volatileweatherbot.models.InitStage
 import com.atstudio.volatileweatherbot.models.WeatherAlert
-import com.atstudio.volatileweatherbot.repository.AlertRepository
+import com.atstudio.volatileweatherbot.repository.alert.AlertRepository
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
