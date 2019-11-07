@@ -1,13 +1,11 @@
-package com.atstudio.volatileweatherbot.repository.alert
+package com.atstudio.volatileweatherbot.repository.weatheralert
 
-import com.atstudio.volatileweatherbot.models.WeatherAlert
+import com.atstudio.volatileweatherbot.models.domain.WeatherAlert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.AutoConfigureDataJdbc
 import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.PropertySource
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.test.context.jdbc.Sql
-import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.springframework.test.jdbc.JdbcTestUtils
 import org.testng.annotations.BeforeMethod
@@ -27,18 +25,19 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    void willSave() {
+    void willSaveAndRetreiveAlert() {
         WeatherAlert alert = [
-                chatId: 123L,
-                cityCode: 'city',
-                lat: 123.56,
-                lng: -54.321
+                chatId          : 123L,
+                locationLabel   : 'city',
+                locationCode    : 'cityCode'
         ] as WeatherAlert
 
         underTest.save(alert)
 
-        def result = template.queryForMap("SELECT chat_id, city_code, lat, lng from t_weather_alerts");
-        assert result.entrySet().size() == 4
+        List<WeatherAlert> stored = underTest.getForLocation('cityCode');
+
+        assert stored.size() == 1
+        assert stored[0] == alert
     }
 
 }

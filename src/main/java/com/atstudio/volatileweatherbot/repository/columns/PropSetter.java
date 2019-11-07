@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.repository;
+package com.atstudio.volatileweatherbot.repository.columns;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

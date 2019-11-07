@@ -1,9 +1,9 @@
 package com.atstudio.volatileweatherbot.services.updateprocessors.initalert;
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
-import com.atstudio.volatileweatherbot.models.AlertInitDto;
-import com.atstudio.volatileweatherbot.models.CityDto;
-import com.atstudio.volatileweatherbot.models.InitStage;
+import com.atstudio.volatileweatherbot.models.dto.AlertInitDto;
+import com.atstudio.volatileweatherbot.models.dto.CityDto;
+import com.atstudio.volatileweatherbot.models.dto.InitStage;
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider;
 import com.atstudio.volatileweatherbot.services.external.CityResolverService;
 import org.springframework.stereotype.Service;
@@ -75,10 +75,9 @@ public class SpecifyCityStageProcessor extends AbstractInitStageProcessor {
     }
 
     private AlertInitDto resolveCityFromCallback(AlertInitDto dto, CallbackQuery callback) {
-        String cityHash = callback.getData();
         CityDto city = dto.getMatchedCities().stream()
-                .filter(cityDto -> cityDto.hashed().equals(cityHash))
-                .findFirst().orElseThrow(() -> new IllegalStateException("City not found by provided hash!"));
+                .filter(cityDto -> cityDto.getCode().equals(callback.getData()))
+                .findFirst().orElseThrow(() -> new IllegalStateException("City not found by provided code!"));
         return resolveCityForDto(dto, city);
     }
 
@@ -94,7 +93,7 @@ public class SpecifyCityStageProcessor extends AbstractInitStageProcessor {
                                 (cityDto) -> Collections.singletonList(
                                         new InlineKeyboardButton()
                                                 .setText(cityDto.getDisplayedName())
-                                                .setCallbackData(cityDto.hashed())
+                                                .setCallbackData(cityDto.getCode())
                                 )
                         ).collect(toList())
                 );

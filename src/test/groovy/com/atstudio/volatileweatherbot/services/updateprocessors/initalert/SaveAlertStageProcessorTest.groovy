@@ -1,11 +1,11 @@
 package com.atstudio.volatileweatherbot.services.updateprocessors.initalert
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
-import com.atstudio.volatileweatherbot.models.AlertInitDto
-import com.atstudio.volatileweatherbot.models.CityDto
-import com.atstudio.volatileweatherbot.models.InitStage
-import com.atstudio.volatileweatherbot.models.WeatherAlert
-import com.atstudio.volatileweatherbot.repository.alert.AlertRepository
+import com.atstudio.volatileweatherbot.models.domain.WeatherAlert
+import com.atstudio.volatileweatherbot.models.dto.AlertInitDto
+import com.atstudio.volatileweatherbot.models.dto.CityDto
+import com.atstudio.volatileweatherbot.models.dto.InitStage
+import com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepository
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
@@ -38,9 +38,10 @@ class SaveAlertStageProcessorTest {
         dto.setStage(InitStage.READY_TO_SAVE)
         dto.setCity(
                 [
-                        cityCode: 'city',
-                        lat: 10.0,
-                        lng: 20.0
+                        code: 'city',
+                        displayedName : 'city-displayed',
+                        lat    : 10.0,
+                        lng    : 20.0
                 ] as CityDto
         )
 
@@ -59,9 +60,8 @@ class SaveAlertStageProcessorTest {
         verify(repository, times(1)).save(alertCaptor.capture())
         WeatherAlert stored = alertCaptor.getValue()
         assert stored.getChatId() == dto.getChatId()
-        assert stored.getCityCode() == 'city'
-        assert stored.getLat() == 10.0
-        assert stored.getLng() == 20.0
+        assert stored.getLocationCode() == 'city'
+        assert stored.getLocationLabel() == 'city-displayed'
     }
 
 

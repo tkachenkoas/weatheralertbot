@@ -1,10 +1,10 @@
 package com.atstudio.volatileweatherbot.services.updateprocessors.initalert;
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
-import com.atstudio.volatileweatherbot.models.AlertInitDto;
-import com.atstudio.volatileweatherbot.models.InitStage;
-import com.atstudio.volatileweatherbot.models.WeatherAlert;
-import com.atstudio.volatileweatherbot.repository.alert.AlertRepository;
+import com.atstudio.volatileweatherbot.models.dto.AlertInitDto;
+import com.atstudio.volatileweatherbot.models.dto.InitStage;
+import com.atstudio.volatileweatherbot.models.domain.WeatherAlert;
+import com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepository;
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Service
 public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
 
-    private final AlertRepository repository;
+    private final AlertRepository alertRepository;
     private final TgApiExecutor executor;
     private final BotMessageProvider messageProvider;
 
     @Autowired
     public SaveAlertStageProcessor(AlertRepository repository, TgApiExecutor executor, BotMessageProvider messageProvider) {
-        this.repository = repository;
+        this.alertRepository = repository;
         this.executor = executor;
         this.messageProvider = messageProvider;
     }
@@ -38,12 +38,11 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
                         messageProvider.getMessage("alert-created")
                 )
         );
-        repository.save(
+        alertRepository.save(
                 WeatherAlert.builder()
                         .chatId(initDto.getChatId())
-                        .cityCode(initDto.getCity().getCityCode())
-                        .lat(initDto.getCity().getLat())
-                        .lng(initDto.getCity().getLng())
+                        .locationCode(initDto.getCity().getCode())
+                        .locationLabel(initDto.getCity().getDisplayedName())
                         .build()
         );
         return doneProcessing(initDto);

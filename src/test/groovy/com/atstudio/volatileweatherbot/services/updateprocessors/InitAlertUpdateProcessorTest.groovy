@@ -1,8 +1,8 @@
 package com.atstudio.volatileweatherbot.services.updateprocessors
 
-import com.atstudio.volatileweatherbot.models.AlertInitDto
-import com.atstudio.volatileweatherbot.models.InitStage
-import com.atstudio.volatileweatherbot.models.StagePhase
+import com.atstudio.volatileweatherbot.models.dto.AlertInitDto
+import com.atstudio.volatileweatherbot.models.dto.InitStage
+import com.atstudio.volatileweatherbot.models.dto.StagePhase
 import com.atstudio.volatileweatherbot.services.updateprocessors.initalert.InitStageProcessor
 import com.google.common.cache.Cache
 import org.mockito.ArgumentCaptor

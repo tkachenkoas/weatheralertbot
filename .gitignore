@@ -13,6 +13,7 @@ mwnw
 
 ### Configs ###
 conf/
+./src/test/resources/test.properties
 
 ### Logs ###
 **/logfile.log*

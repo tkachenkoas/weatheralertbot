@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="liquibase-update" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="liquibase-update" type="MavenRunConfiguration" factoryName="Maven" folderName="local">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />

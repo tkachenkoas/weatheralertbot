@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.services.external;
 
-import com.atstudio.volatileweatherbot.models.CityDto;
+import com.atstudio.volatileweatherbot.models.dto.CityDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.models;
+package com.atstudio.volatileweatherbot.models.dto;
 
 import com.google.common.collect.ImmutableMap;
 

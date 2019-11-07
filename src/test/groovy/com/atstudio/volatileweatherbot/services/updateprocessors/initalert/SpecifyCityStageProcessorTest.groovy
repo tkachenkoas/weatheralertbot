@@ -1,9 +1,9 @@
 package com.atstudio.volatileweatherbot.services.updateprocessors.initalert
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
-import com.atstudio.volatileweatherbot.models.AlertInitDto
-import com.atstudio.volatileweatherbot.models.CityDto
-import com.atstudio.volatileweatherbot.models.StagePhase
+import com.atstudio.volatileweatherbot.models.dto.AlertInitDto
+import com.atstudio.volatileweatherbot.models.dto.CityDto
+import com.atstudio.volatileweatherbot.models.dto.StagePhase
 import com.atstudio.volatileweatherbot.services.external.CityResolverService
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
 import org.mockito.ArgumentCaptor
@@ -111,7 +111,7 @@ class SpecifyCityStageProcessorTest {
         def cityGuesses = (1..3 as List).collect({
             randomCity("$it")
         })
-        update.callbackQuery.data = cityGuesses[1].hashed()
+        update.callbackQuery.data = cityGuesses[1].getCode()
 
         AlertInitDto startDto = provideProcessedInitDto(getChatId(update))
         startDto.setMatchedCities(cityGuesses)
