@@ -1,0 +1,134 @@
+[
+  {
+    "addressComponents": [
+      {
+        "longName": "Alexandria",
+        "shortName": "Alexandria",
+        "types": [
+          "LOCALITY",
+          "POLITICAL"
+        ]
+      },
+      {
+        "longName": "Mason",
+        "shortName": "Mason",
+        "types": [
+          "ADMINISTRATIVE_AREA_LEVEL_3",
+          "POLITICAL"
+        ]
+      },
+      {
+        "longName": "Virginia",
+        "shortName": "VA",
+        "types": [
+          "ADMINISTRATIVE_AREA_LEVEL_1",
+          "POLITICAL"
+        ]
+      },
+      {
+        "longName": "United States",
+        "shortName": "US",
+        "types": [
+          "COUNTRY",
+          "POLITICAL"
+        ]
+      }
+    ],
+    "formattedAddress": "Alexandria, VA, USA",
+    "geometry": {
+      "bounds": {
+        "northeast": {
+          "lat": 38.845011,
+          "lng": -77.0372879
+        },
+        "southwest": {
+          "lat": 38.785216,
+          "lng": -77.144359
+        }
+      },
+      "location": {
+        "lat": 38.8048355,
+        "lng": -77.0469214
+      },
+      "locationType": "APPROXIMATE",
+      "viewport": {
+        "northeast": {
+          "lat": 38.845011,
+          "lng": -77.0372879
+        },
+        "southwest": {
+          "lat": 38.785216,
+          "lng": -77.144359
+        }
+      }
+    },
+    "types": [
+      "LOCALITY",
+      "POLITICAL"
+    ],
+    "partialMatch": false,
+    "placeId": "ChIJ8aukkz5NtokRLAHB24Ym9dc"
+  },
+  {
+    "addressComponents": [
+      {
+        "longName": "Alexandria",
+        "shortName": "Alexandria",
+        "types": [
+          "LOCALITY",
+          "POLITICAL"
+        ]
+      },
+      {
+        "longName": "Alexandria Governorate",
+        "shortName": "Alexandria Governorate",
+        "types": [
+          "ADMINISTRATIVE_AREA_LEVEL_1",
+          "POLITICAL"
+        ]
+      },
+      {
+        "longName": "Egypt",
+        "shortName": "EG",
+        "types": [
+          "COUNTRY",
+          "POLITICAL"
+        ]
+      }
+    ],
+    "formattedAddress": "Alexandria, Alexandria Governorate, Egypt",
+    "geometry": {
+      "bounds": {
+        "northeast": {
+          "lat": 31.330904,
+          "lng": 30.0864017
+        },
+        "southwest": {
+          "lat": 31.1173177,
+          "lng": 29.8233701
+        }
+      },
+      "location": {
+        "lat": 31.2000924,
+        "lng": 29.9187387
+      },
+      "locationType": "APPROXIMATE",
+      "viewport": {
+        "northeast": {
+          "lat": 31.330904,
+          "lng": 30.0864017
+        },
+        "southwest": {
+          "lat": 31.1173177,
+          "lng": 29.8233701
+        }
+      }
+    },
+    "types": [
+      "LOCALITY",
+      "POLITICAL"
+    ],
+    "partialMatch": false,
+    "placeId": "ChIJ0w9xJpHE9RQRuWvuKabN4LQ"
+  }
+]

@@ -13,7 +13,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CityDto {
     private String code;
-    private String displayedName;
+    private String fullName;
+    private String shortName;
     private BigDecimal lat;
     private BigDecimal lng;
 }

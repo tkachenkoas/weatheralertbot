@@ -38,10 +38,10 @@ class SaveAlertStageProcessorTest {
         dto.setStage(InitStage.READY_TO_SAVE)
         dto.setCity(
                 [
-                        code: 'city',
-                        displayedName : 'city-displayed',
-                        lat    : 10.0,
-                        lng    : 20.0
+                        code        : 'city',
+                        shortName   : 'city-displayed',
+                        lat         : 10.0,
+                        lng         : 20.0
                 ] as CityDto
         )
 

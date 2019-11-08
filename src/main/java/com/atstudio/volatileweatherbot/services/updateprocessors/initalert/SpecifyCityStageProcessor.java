@@ -92,7 +92,7 @@ public class SpecifyCityStageProcessor extends AbstractInitStageProcessor {
                         guessedCities.stream().map(
                                 (cityDto) -> Collections.singletonList(
                                         new InlineKeyboardButton()
-                                                .setText(cityDto.getDisplayedName())
+                                                .setText(cityDto.getFullName())
                                                 .setCallbackData(cityDto.getCode())
                                 )
                         ).collect(toList())

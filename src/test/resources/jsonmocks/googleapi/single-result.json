@@ -1,0 +1,64 @@
+[
+  {
+    "addressComponents": [
+      {
+        "longName": "Tel Aviv-Yafo",
+        "shortName": "Tel Aviv-Yafo",
+        "types": [
+          "LOCALITY",
+          "POLITICAL"
+        ]
+      },
+      {
+        "longName": "Tel Aviv District",
+        "shortName": "Tel Aviv District",
+        "types": [
+          "ADMINISTRATIVE_AREA_LEVEL_1",
+          "POLITICAL"
+        ]
+      },
+      {
+        "longName": "Israel",
+        "shortName": "IL",
+        "types": [
+          "COUNTRY",
+          "POLITICAL"
+        ]
+      }
+    ],
+    "formattedAddress": "Tel Aviv-Yafo, Israel",
+    "geometry": {
+      "bounds": {
+        "northeast": {
+          "lat": 32.146611,
+          "lng": 34.8519761
+        },
+        "southwest": {
+          "lat": 32.029252,
+          "lng": 34.7425159
+        }
+      },
+      "location": {
+        "lat": 32.0852999,
+        "lng": 34.78176759999999
+      },
+      "locationType": "APPROXIMATE",
+      "viewport": {
+        "northeast": {
+          "lat": 32.146611,
+          "lng": 34.8519761
+        },
+        "southwest": {
+          "lat": 32.029252,
+          "lng": 34.7425159
+        }
+      }
+    },
+    "types": [
+      "LOCALITY",
+      "POLITICAL"
+    ],
+    "partialMatch": false,
+    "placeId": "ChIJH3w7GaZMHRURkD-WwKJy-8E"
+  }
+]

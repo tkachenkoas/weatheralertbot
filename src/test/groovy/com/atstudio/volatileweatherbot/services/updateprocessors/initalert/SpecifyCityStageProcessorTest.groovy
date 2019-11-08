@@ -17,8 +17,9 @@ import org.testng.annotations.Test
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getUpdateFromFile
-import static com.atstudio.volatileweatherbot.services.external.CityResolverServiceImpl.rndCity
 import static com.atstudio.volatileweatherbot.services.util.UpdateFieldExtractor.getChatId
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
+import static org.apache.commons.lang3.RandomStringUtils.randomNumeric
 import static org.mockito.ArgumentMatchers.any
 import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.*
@@ -138,7 +139,13 @@ class SpecifyCityStageProcessorTest {
     }
 
     private static CityDto randomCity(String suffix) {
-        rndCity("$suffix")
+        [
+                code        : randomAlphabetic(5),
+                shortName   : suffix + randomAlphabetic(4),
+                fullName    : randomAlphabetic(25),
+                lat         : new BigDecimal(randomNumeric(8)) / 1_000_000,
+                lng         : - new BigDecimal(randomNumeric(8)) / 1_000_000
+        ] as CityDto
     }
 
 }

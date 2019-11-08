@@ -16,7 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class Config {
+public class GeneralConfig {
 
     @Value("${threads.count}")
     private Integer threadCount;

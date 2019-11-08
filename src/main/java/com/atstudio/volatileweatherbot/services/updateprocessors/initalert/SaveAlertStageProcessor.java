@@ -42,7 +42,7 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
                 WeatherAlert.builder()
                         .chatId(initDto.getChatId())
                         .locationCode(initDto.getCity().getCode())
-                        .locationLabel(initDto.getCity().getDisplayedName())
+                        .locationLabel(initDto.getCity().getShortName())
                         .build()
         );
         return doneProcessing(initDto);
