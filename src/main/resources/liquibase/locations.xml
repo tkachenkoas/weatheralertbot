@@ -7,9 +7,9 @@
 
     <changeSet id="1" author="anton">
         <createTable tableName="t_locations">
-            <column name="code" type="NUMBER(19,0)"/>
-            <column name="lat" type="VARCHAR(128)"/>
-            <column name="lng" type="VARCHAR(128)"/>
+            <column name="code" type="VARCHAR(128)"/>
+            <column name="lat" type="NUMBER(10,6)"/>
+            <column name="lng" type="NUMBER(10,6)"/>
         </createTable>
         <rollback>
             <dropTable tableName="t_locations"/>
@@ -21,6 +21,12 @@
         <rollback>
             <dropUniqueConstraint tableName="t_locations" constraintName="LOC_CODE"/>
         </rollback>
+    </changeSet>
+
+    <changeSet id="3" author="anton">
+        <addNotNullConstraint tableName="t_locations" columnName="code"/>
+        <addNotNullConstraint tableName="t_locations" columnName="lat"/>
+        <addNotNullConstraint tableName="t_locations" columnName="lng"/>
     </changeSet>
 
 </databaseChangeLog>

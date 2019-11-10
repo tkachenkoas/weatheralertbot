@@ -13,7 +13,7 @@ public enum LocationColumns implements EntityColumns<Location> {
     LAT("lat", Location::getLat, (obj, rs, col) -> obj.setLat(rs.getBigDecimal(col))),
     LNG("lng", Location::getLng, (obj, rs, col) -> obj.setLng(rs.getBigDecimal(col)));
 
-    public static final String TABLE_NAME = "t_locations";
+    public static final String LOCATIONS_TABLE_NAME = "t_locations";
 
     private final String colName;
     private final Function<Location, Object> propAccessor;

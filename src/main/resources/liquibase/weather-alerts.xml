@@ -17,7 +17,8 @@
     </changeSet>
 
     <changeSet id="2" author="anton">
-        <addUniqueConstraint tableName="t_weather_alerts" constraintName="WA_CHAT_LOCATION" columnNames="chat_id,location_code"/>
+        <addUniqueConstraint tableName="t_weather_alerts" constraintName="WA_CHAT_LOCATION"
+                             columnNames="chat_id,location_code"/>
         <rollback>
             <dropUniqueConstraint tableName="t_weather_alerts" constraintName="WA_CHAT_LOCATION"/>
         </rollback>
@@ -33,6 +34,21 @@
         <addNotNullConstraint tableName="t_weather_alerts" columnName="chat_id"/>
         <addNotNullConstraint tableName="t_weather_alerts" columnName="location_label"/>
         <addNotNullConstraint tableName="t_weather_alerts" columnName="alert_type"/>
+    </changeSet>
+
+    <changeSet id="5" author="anton">
+        <addForeignKeyConstraint
+                constraintName="loc_code"
+                baseTableName="t_weather_alerts"
+                baseColumnNames="location_code"
+                referencedTableName="t_locations"
+                referencedColumnNames="code"/>
+    </changeSet>
+
+    <changeSet id="6" author="anton">
+        <createIndex tableName="t_weather_alerts" indexName="ALERT_LOCATION_CODE">
+            <column name="location_code"/>
+        </createIndex>
     </changeSet>
 
 </databaseChangeLog>

@@ -12,4 +12,10 @@ public class EntityColumnsUtils {
                 .collect(joining(delimiter));
     }
 
+    public static String joinColumnNames(String delimiter, String prefix, EntityColumns... args) {
+        return Stream.of(args)
+                .map(col -> prefix + col.getColName())
+                .collect(joining(delimiter));
+    }
+
 }

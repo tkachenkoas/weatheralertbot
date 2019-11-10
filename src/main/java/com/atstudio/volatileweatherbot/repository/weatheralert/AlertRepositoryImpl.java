@@ -17,7 +17,7 @@ public class AlertRepositoryImpl extends AbstractJdbcRepository<WeatherAlert> im
 
     @Override
     public void save(WeatherAlert alert) {
-        saveEntity(alert, WEATHER_ALERTS_TABLE, WeatherAlertColumns.values());
+        createIfNotExist(alert, WEATHER_ALERTS_TABLE, WeatherAlertColumns.values());
     }
 
     @Override

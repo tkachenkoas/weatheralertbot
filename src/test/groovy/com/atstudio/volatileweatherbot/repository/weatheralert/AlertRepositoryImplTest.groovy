@@ -1,18 +1,19 @@
 package com.atstudio.volatileweatherbot.repository.weatheralert
 
+import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType
 import com.atstudio.volatileweatherbot.models.domain.WeatherAlert
+import com.atstudio.volatileweatherbot.repository.RepoConfig
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.data.jdbc.AutoConfigureDataJdbc
 import org.springframework.context.annotation.Import
-import org.springframework.context.annotation.PropertySource
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.springframework.test.jdbc.JdbcTestUtils
+import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
-@PropertySource("classpath:test.properties")
-@AutoConfigureDataJdbc
+@ContextConfiguration(classes = RepoConfig)
 @Import(AlertRepositoryImpl)
 class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
 
@@ -20,17 +21,14 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
     @Autowired AlertRepositoryImpl underTest
 
     @BeforeMethod
+    @AfterMethod
     void cleanDb() {
         JdbcTestUtils.deleteFromTables(template, "t_weather_alerts")
     }
 
     @Test
     void willSaveAndRetreiveAlert() {
-        WeatherAlert alert = [
-                chatId          : 123L,
-                locationLabel   : 'city',
-                locationCode    : 'cityCode'
-        ] as WeatherAlert
+        WeatherAlert alert = someAlert()
 
         underTest.save(alert)
 
@@ -38,6 +36,15 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
 
         assert stored.size() == 1
         assert stored[0] == alert
+    }
+
+    static WeatherAlert someAlert() {
+        return [
+                chatId          : 123L,
+                alertWeatherType : AlertWeatherType.RAIN,
+                locationLabel   : 'city',
+                locationCode    : 'cityCode'
+        ] as WeatherAlert
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface LocationRepository {
 
-    void save(Location location);
+    void createIfNotExists(Location location);
     List<Location> getLocationsWithActiveAlerts();
     
 }

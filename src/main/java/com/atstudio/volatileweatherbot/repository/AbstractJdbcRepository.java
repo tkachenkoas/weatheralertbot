@@ -22,7 +22,7 @@ public class AbstractJdbcRepository<T> {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    protected void saveEntity(T entity, String tableName, EntityColumns<T>[] fields) {
+    protected void createIfNotExist(T entity, String tableName, EntityColumns<T>[] fields) {
 
         String paramsList = Stream.of(fields).map(fld -> ":" + fld.getColName()).collect(joining(","));
 
@@ -33,7 +33,7 @@ public class AbstractJdbcRepository<T> {
         jdbcTemplate.update(
                 " INSERT INTO " + tableName +
                         "(" + joinColumnNames(",", fields) + ")" +
-                        " VALUES (" + paramsList + ") ",
+                        " VALUES (" + paramsList + ") ON CONFLICT DO NOTHING",
                 paramSource(paramValues)
         );
     }

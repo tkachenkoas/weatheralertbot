@@ -1,10 +1,12 @@
 package com.atstudio.volatileweatherbot.services.updateprocessors.initalert
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor
+import com.atstudio.volatileweatherbot.models.domain.Location
 import com.atstudio.volatileweatherbot.models.domain.WeatherAlert
 import com.atstudio.volatileweatherbot.models.dto.AlertInitDto
 import com.atstudio.volatileweatherbot.models.dto.CityDto
 import com.atstudio.volatileweatherbot.models.dto.InitStage
+import com.atstudio.volatileweatherbot.repository.location.LocationRepository
 import com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepository
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
 import org.mockito.ArgumentCaptor
@@ -20,7 +22,8 @@ import static org.mockito.Mockito.*
 
 class SaveAlertStageProcessorTest {
 
-    @Mock AlertRepository repository;
+    @Mock AlertRepository alertRepository;
+    @Mock LocationRepository locationRepository;
     @Mock TgApiExecutor executor;
     @Mock BotMessageProvider messageProvider;
 
@@ -29,7 +32,7 @@ class SaveAlertStageProcessorTest {
     @BeforeMethod
     void init() {
         MockitoAnnotations.initMocks(this)
-        underTest = new SaveAlertStageProcessor(repository, executor, messageProvider)
+        underTest = new SaveAlertStageProcessor(alertRepository, locationRepository, executor, messageProvider)
     }
 
     @Test
@@ -56,8 +59,15 @@ class SaveAlertStageProcessorTest {
         assert sendMessage.getChatId() == '' + dto.getChatId()
         assert sendMessage.getText() == chatText
 
+        ArgumentCaptor<Location>locationCaptor = ArgumentCaptor.forClass(Location)
+        verify(locationRepository, times(1)).createIfNotExists(locationCaptor.capture())
+        Location location = locationCaptor.getValue()
+        assert location.getCode() == dto.getCity().getCode()
+        assert location.getLng() == dto.getCity().getLng()
+        assert location.getLat() == dto.getCity().getLat()
+
         ArgumentCaptor<WeatherAlert> alertCaptor = ArgumentCaptor.forClass(WeatherAlert)
-        verify(repository, times(1)).save(alertCaptor.capture())
+        verify(alertRepository, times(1)).save(alertCaptor.capture())
         WeatherAlert stored = alertCaptor.getValue()
         assert stored.getChatId() == dto.getChatId()
         assert stored.getLocationCode() == 'city'

@@ -1,13 +1,17 @@
 package com.atstudio.volatileweatherbot.services.updateprocessors.initalert;
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
+import com.atstudio.volatileweatherbot.models.domain.Location;
 import com.atstudio.volatileweatherbot.models.dto.AlertInitDto;
+import com.atstudio.volatileweatherbot.models.dto.CityDto;
 import com.atstudio.volatileweatherbot.models.dto.InitStage;
 import com.atstudio.volatileweatherbot.models.domain.WeatherAlert;
+import com.atstudio.volatileweatherbot.repository.location.LocationRepository;
 import com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepository;
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -15,12 +19,17 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
 
     private final AlertRepository alertRepository;
+    private final LocationRepository locationRepository;
     private final TgApiExecutor executor;
     private final BotMessageProvider messageProvider;
 
     @Autowired
-    public SaveAlertStageProcessor(AlertRepository repository, TgApiExecutor executor, BotMessageProvider messageProvider) {
+    public SaveAlertStageProcessor(AlertRepository repository,
+                                   LocationRepository locationRepository,
+                                   TgApiExecutor executor,
+                                   BotMessageProvider messageProvider) {
         this.alertRepository = repository;
+        this.locationRepository = locationRepository;
         this.executor = executor;
         this.messageProvider = messageProvider;
     }
@@ -31,6 +40,7 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
     }
 
     @Override
+    @Transactional
     protected AlertInitDto processingPhase(Update update, AlertInitDto initDto) {
         executor.execute(
                 new SendMessage(
@@ -38,6 +48,7 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
                         messageProvider.getMessage("alert-created")
                 )
         );
+        locationRepository.createIfNotExists(toLocation(initDto.getCity()));
         alertRepository.save(toWeatherAlert(initDto));
         return doneProcessing(initDto);
     }
@@ -54,5 +65,13 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
                 .alertWeatherType(initDto.getAlertWeatherType())
                 .locationLabel(initDto.getCity().getShortName())
                 .build();
+    }
+
+    private Location toLocation(CityDto cityDto) {
+        return new Location(
+                cityDto.getCode(),
+                cityDto.getLat(),
+                cityDto.getLng()
+        );
     }
 }
