@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class WeatherAlert {
     private Long chatId;
+    private AlertWeatherType alertWeatherType;
     private String locationLabel;
     private String locationCode;
 }

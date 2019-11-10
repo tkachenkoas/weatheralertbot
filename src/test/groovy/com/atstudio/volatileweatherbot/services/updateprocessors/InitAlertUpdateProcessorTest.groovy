@@ -1,5 +1,6 @@
 package com.atstudio.volatileweatherbot.services.updateprocessors
 
+
 import com.atstudio.volatileweatherbot.models.dto.AlertInitDto
 import com.atstudio.volatileweatherbot.models.dto.InitStage
 import com.atstudio.volatileweatherbot.models.dto.StagePhase
@@ -19,10 +20,7 @@ import static com.atstudio.volatileweatherbot.TestJsonHelper.getUpdateFromFile
 import static com.atstudio.volatileweatherbot.services.util.UpdateFieldExtractor.getChatId
 import static org.mockito.ArgumentMatchers.any
 import static org.mockito.ArgumentMatchers.eq
-import static org.mockito.Mockito.never
-import static org.mockito.Mockito.times
-import static org.mockito.Mockito.verify
-import static org.mockito.Mockito.when
+import static org.mockito.Mockito.*
 import static org.mockito.MockitoAnnotations.initMocks
 
 class InitAlertUpdateProcessorTest extends GroovyTestCase {

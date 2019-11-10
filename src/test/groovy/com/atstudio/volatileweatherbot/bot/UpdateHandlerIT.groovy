@@ -8,10 +8,12 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
 import org.springframework.test.jdbc.JdbcTestUtils
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
+import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
+import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTableWhere
 
 @ContextConfiguration(classes = BotTestConfigExcludingTgBeans)
 @DirtiesContext
@@ -24,6 +26,7 @@ class UpdateHandlerIT extends AbstractTestNGSpringContextTests {
     @Autowired List<BotApiMethod> executedMethods
 
     @BeforeMethod
+    @AfterMethod
     void clean() {
         JdbcTestUtils.deleteFromTables(template, "t_weather_alerts")
     }
@@ -38,6 +41,15 @@ class UpdateHandlerIT extends AbstractTestNGSpringContextTests {
         updateHandler.handle(getPlainMessageUpdate("Some city"))
 
         assert JdbcTestUtils.countRowsInTable(template, "t_weather_alerts") == 1
+    }
+
+    @Test
+    void defaultCreatedAlertTypeIsRain()  {
+        // init
+        updateHandler.handle(getPlainMessageUpdate("/subscribe"))
+        // City
+        updateHandler.handle(getPlainMessageUpdate("Some city"))
+        assert countRowsInTableWhere(template, "t_weather_alerts", "alert_type='RAIN'") == 1
     }
 
     // for debugging purposes

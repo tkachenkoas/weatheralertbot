@@ -23,4 +23,16 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="3" author="anton">
+        <addColumn tableName="t_weather_alerts">
+            <column name="alert_type" type="VARCHAR(128)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="4" author="anton">
+        <addNotNullConstraint tableName="t_weather_alerts" columnName="chat_id"/>
+        <addNotNullConstraint tableName="t_weather_alerts" columnName="location_label"/>
+        <addNotNullConstraint tableName="t_weather_alerts" columnName="alert_type"/>
+    </changeSet>
+
 </databaseChangeLog>

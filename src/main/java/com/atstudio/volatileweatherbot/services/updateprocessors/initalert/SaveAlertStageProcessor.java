@@ -38,18 +38,21 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
                         messageProvider.getMessage("alert-created")
                 )
         );
-        alertRepository.save(
-                WeatherAlert.builder()
-                        .chatId(initDto.getChatId())
-                        .locationCode(initDto.getCity().getCode())
-                        .locationLabel(initDto.getCity().getShortName())
-                        .build()
-        );
+        alertRepository.save(toWeatherAlert(initDto));
         return doneProcessing(initDto);
     }
 
     @Override
     public InitStage applicableForStage() {
         return InitStage.READY_TO_SAVE;
+    }
+
+    private WeatherAlert toWeatherAlert(AlertInitDto initDto) {
+        return WeatherAlert.builder()
+                .chatId(initDto.getChatId())
+                .locationCode(initDto.getCity().getCode())
+                .alertWeatherType(initDto.getAlertWeatherType())
+                .locationLabel(initDto.getCity().getShortName())
+                .build();
     }
 }
