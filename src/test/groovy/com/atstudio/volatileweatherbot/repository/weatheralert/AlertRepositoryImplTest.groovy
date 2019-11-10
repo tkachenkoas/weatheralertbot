@@ -11,7 +11,7 @@ import org.springframework.test.jdbc.JdbcTestUtils
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
-@PropertySource("classpath:/test.properties")
+@PropertySource("classpath:test.properties")
 @AutoConfigureDataJdbc
 @Import(AlertRepositoryImpl)
 class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {

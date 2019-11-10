@@ -5,11 +5,12 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -18,8 +19,11 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class GeneralConfig {
 
-    @Value("${threads.count}")
     private Integer threadCount;
+    @Autowired
+    public GeneralConfig(Environment environment) {
+        this.threadCount = environment.getProperty("threads.count", Integer.class);
+    }
 
     @Bean
     public TaskExecutor updateExecutor() {

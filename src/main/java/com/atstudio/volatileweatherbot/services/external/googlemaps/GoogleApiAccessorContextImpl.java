@@ -6,12 +6,12 @@ import com.google.maps.model.GeocodingResult;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class GoogleApiContextAccessor implements GoogleApiAccessor {
+public class GoogleApiAccessorContextImpl implements GoogleApiAccessor {
 
     private final GeoApiContext context;
 
     @Autowired
-    public GoogleApiContextAccessor(GeoApiContext context) {
+    public GoogleApiAccessorContextImpl(GeoApiContext context) {
         this.context = context;
     }
 

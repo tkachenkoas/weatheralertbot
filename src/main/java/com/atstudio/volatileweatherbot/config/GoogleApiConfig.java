@@ -1,7 +1,7 @@
 package com.atstudio.volatileweatherbot.config;
 
 import com.atstudio.volatileweatherbot.services.external.googlemaps.GoogleApiAccessor;
-import com.atstudio.volatileweatherbot.services.external.googlemaps.GoogleApiContextAccessor;
+import com.atstudio.volatileweatherbot.services.external.googlemaps.GoogleApiAccessorContextImpl;
 import com.google.maps.GeoApiContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -23,7 +23,7 @@ public class GoogleApiConfig {
 
     @Bean
     public GoogleApiAccessor contextApiAccessor(GeoApiContext geoApiContext) {
-        return new GoogleApiContextAccessor(geoApiContext);
+        return new GoogleApiAccessorContextImpl(geoApiContext);
     }
 
 }
