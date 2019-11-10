@@ -1,7 +1,7 @@
 package com.atstudio.volatileweatherbot.bot;
 
+import com.atstudio.volatileweatherbot.aspect.LogArgsAndResult;
 import com.atstudio.volatileweatherbot.services.updateprocessors.UpdateProcessor;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,16 +14,14 @@ import java.util.List;
 public class UpdateHandler {
 
     private final List<UpdateProcessor> processors;
-    private final Gson gson;
 
     @Autowired
-    public UpdateHandler(List<UpdateProcessor> processors, Gson gson) {
+    public UpdateHandler(List<UpdateProcessor> processors) {
         this.processors = processors;
-        this.gson = gson;
     }
 
+    @LogArgsAndResult
     public void handle(Update update) {
-        log.info("Incoming update: {}", gson.toJson(update));
         for (UpdateProcessor processor: processors) {
             if (processor.willTakeCareOf(update)) {
                 return;
