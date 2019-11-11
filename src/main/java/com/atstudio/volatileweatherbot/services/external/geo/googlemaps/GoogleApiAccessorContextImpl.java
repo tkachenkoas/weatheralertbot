@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.services.external.googlemaps;
+package com.atstudio.volatileweatherbot.services.external.geo.googlemaps;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;

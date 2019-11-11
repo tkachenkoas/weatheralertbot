@@ -1,7 +1,7 @@
-package com.atstudio.volatileweatherbot.services.external;
+package com.atstudio.volatileweatherbot.services.external.geo;
 
 import com.atstudio.volatileweatherbot.models.dto.CityDto;
-import com.atstudio.volatileweatherbot.services.external.googlemaps.GoogleApiAccessor;
+import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleApiAccessor;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import lombok.extern.slf4j.Slf4j;

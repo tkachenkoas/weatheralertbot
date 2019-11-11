@@ -4,7 +4,7 @@ import com.atstudio.volatileweatherbot.bot.TgApiExecutor
 import com.atstudio.volatileweatherbot.models.dto.AlertInitDto
 import com.atstudio.volatileweatherbot.models.dto.CityDto
 import com.atstudio.volatileweatherbot.models.dto.StagePhase
-import com.atstudio.volatileweatherbot.services.external.CityResolverService
+import com.atstudio.volatileweatherbot.services.external.geo.CityResolverService
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock

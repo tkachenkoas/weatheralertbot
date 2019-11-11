@@ -5,7 +5,7 @@ import com.atstudio.volatileweatherbot.models.dto.AlertInitDto;
 import com.atstudio.volatileweatherbot.models.dto.CityDto;
 import com.atstudio.volatileweatherbot.models.dto.InitStage;
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider;
-import com.atstudio.volatileweatherbot.services.external.CityResolverService;
+import com.atstudio.volatileweatherbot.services.external.geo.CityResolverService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

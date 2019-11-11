@@ -1,4 +1,4 @@
-package com.atstudio.volatileweatherbot.services.external;
+package com.atstudio.volatileweatherbot.services.external.geo;
 
 import com.atstudio.volatileweatherbot.models.dto.CityDto;
 
