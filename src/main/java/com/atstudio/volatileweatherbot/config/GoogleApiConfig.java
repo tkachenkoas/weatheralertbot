@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile;
 public class GoogleApiConfig {
 
     @Bean
-    public GeoApiContext geoApiContext(@Value("${google.api.key}") String apiKey) {
+    protected GeoApiContext geoApiContext(@Value("${google.api.key}") String apiKey) {
         return new GeoApiContext.Builder()
                 .apiKey(apiKey)
                 .build();

@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LogArgumentsAspect {
 
-    private final Gson prettyGson;
+    private final Gson gson;
 
     @Autowired
-    public LogArgumentsAspect(Gson prettyGson) {
-        this.prettyGson = prettyGson;
+    public LogArgumentsAspect(Gson gson) {
+        this.gson = gson;
     }
 
     @Before("@annotation(com.atstudio.volatileweatherbot.aspect.LogArgsAndResult)")
@@ -26,7 +26,7 @@ public class LogArgumentsAspect {
         log.info("Executing method {}, method arguments are: ", joinPoint.toShortString());
         int index = 0;
         for (Object arg: joinPoint.getArgs()) {
-            log.info("Arg #{}: {}", ++index, prettyGson.toJson(arg));
+            log.info("Arg #{}: {}", ++index, gson.toJson(arg));
         }
     }
 

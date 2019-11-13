@@ -51,4 +51,10 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="7" author="anton">
+        <addColumn tableName="t_weather_alerts">
+            <column name="alert_type"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

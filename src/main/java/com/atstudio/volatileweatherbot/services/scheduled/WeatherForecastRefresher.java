@@ -22,7 +22,7 @@ public class WeatherForecastRefresher {
         this.weatherForecastRepository = weatherForecastRepository;
     }
 
-    @Scheduled(fixedRateString = "${scheduled.tomorrow.forecast.delay}")
+    @Scheduled(fixedRateString = "${scheduled.forecast-refresh.delay}")
     void refreshWeatherForecast() {
 
     }

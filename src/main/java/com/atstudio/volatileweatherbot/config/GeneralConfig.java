@@ -16,13 +16,19 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
 @Configuration
 public class GeneralConfig {
 
+    private final Environment environment;
+
     private Integer threadCount;
+
     @Autowired
     public GeneralConfig(Environment environment) {
-        this.threadCount = environment.getProperty("threads.count", Integer.class);
+        this.environment = environment;
+        this.threadCount = environment.getProperty("main.executor.threads.count", Integer.class);
     }
 
     @Bean
@@ -52,7 +58,13 @@ public class GeneralConfig {
 
     @Bean
     public Gson prettyGson() {
-        return new GsonBuilder().setPrettyPrinting().create();
+        GsonBuilder builder = new GsonBuilder();
+        if (isTrue(
+                environment.getProperty("gson.logs.pretty.print", Boolean.class))
+        ) {
+            builder.setPrettyPrinting();
+        }
+        return builder.create();
     }
 
 }
