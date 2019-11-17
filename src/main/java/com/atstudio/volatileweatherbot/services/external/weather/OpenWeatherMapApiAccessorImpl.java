@@ -1,16 +1,17 @@
-package com.atstudio.volatileweatherbot.services.scheduled;
+package com.atstudio.volatileweatherbot.services.external.weather;
 
 import com.atstudio.volatileweatherbot.aspect.LogArgsAndResult;
 import com.atstudio.volatileweatherbot.models.domain.Location;
 import com.google.maps.internal.ratelimiter.RateLimiter;
 import org.openweathermap.api.DataWeatherClient;
 import org.openweathermap.api.common.Coordinate;
-import org.openweathermap.api.model.currentweather.CurrentWeather;
+import org.openweathermap.api.model.forecast.ForecastInformation;
+import org.openweathermap.api.model.forecast.hourly.HourlyForecast;
 import org.openweathermap.api.query.Language;
 import org.openweathermap.api.query.QueryBuilderPicker;
 import org.openweathermap.api.query.ResponseFormat;
 import org.openweathermap.api.query.UnitFormat;
-import org.openweathermap.api.query.currentweather.CurrentWeatherOneLocationQuery;
+import org.openweathermap.api.query.forecast.hourly.HourlyForecastQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class OpenWeatherMapApiAccessorImpl implements OpenWeatherMapApiAccessor {
@@ -26,11 +27,11 @@ public class OpenWeatherMapApiAccessorImpl implements OpenWeatherMapApiAccessor 
 
     @Override
     @LogArgsAndResult
-    public CurrentWeather getCurrentWeather(Location location) {
+    public ForecastInformation<HourlyForecast> getHourlyForecast(Location location) {
         this.rateLimiter.acquire();
-        CurrentWeatherOneLocationQuery query = QueryBuilderPicker.pick()
-                .currentWeather()
-                .oneLocation()
+         HourlyForecastQuery query = QueryBuilderPicker.pick()
+                .forecast()
+                .hourly()
                 .byGeographicCoordinates(
                         new Coordinate(
                                 location.getLng().toPlainString(),
@@ -41,6 +42,6 @@ public class OpenWeatherMapApiAccessorImpl implements OpenWeatherMapApiAccessor 
                 .responseFormat(ResponseFormat.JSON)
                 .unitFormat(UnitFormat.METRIC)
                 .build();
-        return client.getCurrentWeather(query);
+        return client.getForecastInformation(query);
     }
 }

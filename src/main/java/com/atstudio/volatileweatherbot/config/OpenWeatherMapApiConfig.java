@@ -1,7 +1,7 @@
 package com.atstudio.volatileweatherbot.config;
 
-import com.atstudio.volatileweatherbot.services.scheduled.OpenWeatherMapApiAccessor;
-import com.atstudio.volatileweatherbot.services.scheduled.OpenWeatherMapApiAccessorImpl;
+import com.atstudio.volatileweatherbot.services.external.weather.OpenWeatherMapApiAccessor;
+import com.atstudio.volatileweatherbot.services.external.weather.OpenWeatherMapApiAccessorImpl;
 import com.google.maps.internal.ratelimiter.RateLimiter;
 import org.openweathermap.api.DataWeatherClient;
 import org.openweathermap.api.UrlConnectionDataWeatherClient;

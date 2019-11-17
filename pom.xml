@@ -13,6 +13,10 @@
             <id>spring</id>
             <url>https://repo.spring.io/libs-release/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <properties>
@@ -237,9 +241,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.openweathermap.java-api</groupId>
-            <artifactId>api-core</artifactId>
-            <version>1.2</version>
+            <groupId>com.github.xSAVIKx</groupId>
+            <artifactId>openweathermap-java-api</artifactId>
+            <version>development-v1.2.3-gd157d47-10</version>
         </dependency>
 
         <dependency>

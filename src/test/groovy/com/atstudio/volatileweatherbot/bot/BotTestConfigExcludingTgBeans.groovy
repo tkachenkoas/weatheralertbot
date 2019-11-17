@@ -1,7 +1,7 @@
 package com.atstudio.volatileweatherbot.bot
 
 import com.atstudio.volatileweatherbot.BotApplication
-import com.atstudio.volatileweatherbot.services.external.googlemaps.GoogleApiAccessor
+import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleApiAccessor
 import org.springframework.boot.test.autoconfigure.data.jdbc.AutoConfigureDataJdbc
 import org.springframework.context.annotation.*
 import org.springframework.test.context.ActiveProfiles

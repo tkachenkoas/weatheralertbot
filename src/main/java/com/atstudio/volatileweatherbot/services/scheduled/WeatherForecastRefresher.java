@@ -2,6 +2,7 @@ package com.atstudio.volatileweatherbot.services.scheduled;
 
 import com.atstudio.volatileweatherbot.repository.location.LocationRepository;
 import com.atstudio.volatileweatherbot.repository.weatherforecast.WeatherForecastRepository;
+import com.atstudio.volatileweatherbot.services.external.weather.WeatherForecastProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
