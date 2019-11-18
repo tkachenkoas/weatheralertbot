@@ -2,12 +2,15 @@ package com.atstudio.volatileweatherbot.bot
 
 import com.atstudio.volatileweatherbot.BotApplication
 import com.atstudio.volatileweatherbot.TestJsonHelper
+import com.atstudio.volatileweatherbot.services.external.geo.TimeZoneResolver
 import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleApiAccessor
 import com.atstudio.volatileweatherbot.services.external.weather.OpenWeatherMapApiAccessor
 import org.springframework.boot.test.autoconfigure.data.jdbc.AutoConfigureDataJdbc
 import org.springframework.context.annotation.*
 import org.springframework.test.context.ActiveProfiles
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
+
+import java.time.ZoneId
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.geocodingsFromFile
 import static org.mockito.ArgumentMatchers.any
@@ -28,7 +31,7 @@ class BotTestConfigExcludingTgBeans {
     @Bean
     TgApiExecutor executor(List<BotApiMethod> lastExecuted) {
         TgApiExecutor result = mock(TgApiExecutor)
-        when(result.execute(any())).thenAnswer({ inv  ->
+        when(result.execute(any())).thenAnswer({ inv ->
             lastExecuted.add(inv.getArgument(0))
             return null;
         })
@@ -41,6 +44,13 @@ class BotTestConfigExcludingTgBeans {
         when(mock.getGeocodings(any()))
                 .thenReturn(geocodingsFromFile('single-result.json'))
         return mock
+    }
+
+    @Bean
+    TimeZoneResolver resolver() {
+        def resolver = mock(TimeZoneResolver)
+        when(resolver.timeZoneForCoordinates(any(), any())).thenReturn(ZoneId.of("Israel"))
+        return resolver
     }
 
     @Bean

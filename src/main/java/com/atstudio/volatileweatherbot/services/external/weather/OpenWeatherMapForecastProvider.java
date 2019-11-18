@@ -39,9 +39,11 @@ public class OpenWeatherMapForecastProvider implements WeatherForecastProvider {
         forecast.setLocationCode(location.getCode());
 
         ForecastInformation<HourlyForecast> forecastInfo = apiAccessor.getHourlyForecast(location);
-        int systemOffset = ZoneId.systemDefault().getRules().getOffset(Instant.now()).getTotalSeconds();
+
+        Instant now = Instant.now();
+        int systemOffset = ZoneId.systemDefault().getRules().getOffset(now).getTotalSeconds();
         ZoneId timeZone = ofTotalSeconds(
-                (int) forecastInfo.getCity().getTimezone() + systemOffset
+                location.getTimeZone().getRules().getOffset(now).getTotalSeconds() + systemOffset
         );
         List<ForecastDetails> details = forecastInfo.getForecasts().stream()
                 .map((HourlyForecast hourly) -> fromHourlyForecast(hourly, timeZone))

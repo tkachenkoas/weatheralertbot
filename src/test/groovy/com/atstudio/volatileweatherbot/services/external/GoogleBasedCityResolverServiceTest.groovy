@@ -2,7 +2,7 @@ package com.atstudio.volatileweatherbot.services.external
 
 
 import com.atstudio.volatileweatherbot.models.dto.CityDto
-import com.atstudio.volatileweatherbot.services.external.geo.GoogleBasedCityResolverService
+import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleBasedCityResolverService
 import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleApiAccessor
 import org.mockito.Mock
 import org.mockito.Mockito

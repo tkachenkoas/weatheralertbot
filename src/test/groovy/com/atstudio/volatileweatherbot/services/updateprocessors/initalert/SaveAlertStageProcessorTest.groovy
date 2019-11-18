@@ -8,6 +8,7 @@ import com.atstudio.volatileweatherbot.models.dto.CityDto
 import com.atstudio.volatileweatherbot.models.dto.InitStage
 import com.atstudio.volatileweatherbot.repository.location.LocationRepository
 import com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepository
+import com.atstudio.volatileweatherbot.services.external.geo.TimeZoneResolver
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
@@ -17,22 +18,25 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
+import java.time.ZoneId
+
 import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.*
 
 class SaveAlertStageProcessorTest {
 
-    @Mock AlertRepository alertRepository;
-    @Mock LocationRepository locationRepository;
-    @Mock TgApiExecutor executor;
-    @Mock BotMessageProvider messageProvider;
+    @Mock AlertRepository alertRepository
+    @Mock LocationRepository locationRepository
+    @Mock TgApiExecutor executor
+    @Mock BotMessageProvider messageProvider
+    @Mock TimeZoneResolver timeZoneResolver
 
-    SaveAlertStageProcessor underTest;
+    SaveAlertStageProcessor underTest
 
     @BeforeMethod
     void init() {
         MockitoAnnotations.initMocks(this)
-        underTest = new SaveAlertStageProcessor(alertRepository, locationRepository, executor, messageProvider)
+        underTest = new SaveAlertStageProcessor(alertRepository, locationRepository, executor, messageProvider, timeZoneResolver)
     }
 
     @Test
@@ -47,6 +51,7 @@ class SaveAlertStageProcessorTest {
                         lng         : 20.0
                 ] as CityDto
         )
+        when(timeZoneResolver.timeZoneForCoordinates(eq(10.0 as BigDecimal), eq(20.0 as BigDecimal))).thenReturn(ZoneId.systemDefault())
 
         def chatText = "Alert was created"
         when(messageProvider.getMessage(eq("alert-created"))).thenReturn(chatText)
@@ -65,6 +70,7 @@ class SaveAlertStageProcessorTest {
         assert location.getCode() == dto.getCity().getCode()
         assert location.getLng() == dto.getCity().getLng()
         assert location.getLat() == dto.getCity().getLat()
+        assert location.getTimeZone() == ZoneId.systemDefault()
 
         ArgumentCaptor<WeatherAlert> alertCaptor = ArgumentCaptor.forClass(WeatherAlert)
         verify(alertRepository, times(1)).save(alertCaptor.capture())

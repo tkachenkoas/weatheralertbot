@@ -1,5 +1,7 @@
 package com.atstudio.volatileweatherbot.config;
 
+import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleApiTimeZoneResolver;
+import com.atstudio.volatileweatherbot.services.external.geo.TimeZoneResolver;
 import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleApiAccessor;
 import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleApiAccessorContextImpl;
 import com.google.maps.GeoApiContext;
@@ -24,6 +26,11 @@ public class GoogleApiConfig {
     @Bean
     public GoogleApiAccessor contextApiAccessor(GeoApiContext geoApiContext) {
         return new GoogleApiAccessorContextImpl(geoApiContext);
+    }
+
+    @Bean
+    public TimeZoneResolver timeZoneResolver(GeoApiContext geoApiContext) {
+        return new GoogleApiTimeZoneResolver(geoApiContext);
     }
 
 }

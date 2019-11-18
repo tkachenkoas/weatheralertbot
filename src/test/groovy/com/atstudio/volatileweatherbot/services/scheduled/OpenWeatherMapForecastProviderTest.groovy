@@ -13,6 +13,7 @@ import org.testng.annotations.Test
 import java.time.Duration
 import java.time.Instant
 import java.time.Month
+import java.time.ZoneId
 
 import static java.time.LocalDateTime.of
 import static org.mockito.ArgumentMatchers.eq
@@ -32,7 +33,7 @@ class OpenWeatherMapForecastProviderTest {
 
     @Test
     void testConvert() {
-        Location testLocation = new Location('city', 10.0 as BigDecimal, 15.0 as BigDecimal)
+        Location testLocation = new Location('city', 10.0 as BigDecimal, 15.0 as BigDecimal, ZoneId.of("Australia/Brisbane"))
 
         when(accessor.getHourlyForecast(eq(testLocation)))
                 .thenReturn(TestJsonHelper.getWeatherForecast('clouds-rain.json'))

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +16,5 @@ public class Location {
     private String code;
     private BigDecimal lat;
     private BigDecimal lng;
+    private ZoneId timeZone;
 }

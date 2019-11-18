@@ -29,4 +29,14 @@
         <addNotNullConstraint tableName="t_locations" columnName="lng"/>
     </changeSet>
 
+    <changeSet id="4" author="anton">
+        <addColumn tableName="t_locations">
+            <column name="timezone" type="VARCHAR(64)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="5" author="anton">
+        <addNotNullConstraint tableName="t_locations" columnName="timezone"/>
+    </changeSet>
+
 </databaseChangeLog>

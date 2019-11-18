@@ -1,7 +1,6 @@
 package com.atstudio.volatileweatherbot.repository.location
 
 import com.atstudio.volatileweatherbot.models.domain.Location
-import com.atstudio.volatileweatherbot.models.domain.WeatherAlert
 import com.atstudio.volatileweatherbot.repository.RepoConfig
 import com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepositoryImpl
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,9 +12,9 @@ import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
+import java.time.ZoneId
+
 import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.LOCATIONS_TABLE_NAME
-import static com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepositoryImplTest.someAlert
-import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAlertColumns.WEATHER_ALERTS_TABLE
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTableWhere
 import static org.springframework.test.jdbc.JdbcTestUtils.deleteFromTables
 
@@ -31,12 +30,12 @@ class LocationRepositoryImplTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     @AfterMethod
     void cleanDb() {
-        deleteFromTables(template, WEATHER_ALERTS_TABLE, LOCATIONS_TABLE_NAME)
+        deleteFromTables(template, LOCATIONS_TABLE_NAME)
     }
 
     @Test
     void locationIsStored() {
-        Location loc = new Location('code', 10.0 as BigDecimal, 15.0 as BigDecimal)
+        Location loc = rndLocation()
 
         underTest.createIfNotExists(loc)
         assert countRowsInTableWhere(
@@ -47,10 +46,10 @@ class LocationRepositoryImplTest extends AbstractTestNGSpringContextTests {
 
     @Test
     void onCodeMatchWillDoNothing() {
-        Location loc = new Location('code', 10.0 as BigDecimal, 15.0 as BigDecimal)
+        Location loc = rndLocation()
         underTest.createIfNotExists(loc)
 
-        underTest.createIfNotExists(new Location('code', 15.0 as BigDecimal, 10.0 as BigDecimal))
+        underTest.createIfNotExists(rndLocation())
 
         assert countRowsInTableWhere(
                 template,
@@ -59,28 +58,15 @@ class LocationRepositoryImplTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    void willFindLocationsWithAlerts() {
-        Location loc = new Location('code', 10.0 as BigDecimal, 15.0 as BigDecimal)
+    void willLoadStoredLocation() {
+        Location loc = rndLocation()
         underTest.createIfNotExists(loc)
 
-        assert underTest.getLocationsWithActiveAlerts().size() == 0
-
-        WeatherAlert alert = someAlert();
-        alert.setLocationCode(loc.getCode())
-        alertRepository.save(alert)
-
-        def locations = underTest.getLocationsWithActiveAlerts()
-
-        assert locations.size() == 1
-
-        def actual = locations[0]
-        assert actual.getCode() == loc.getCode() &&
-                strip(actual.getLat()) == strip(loc.getLat()) &&
-                strip(actual.getLng()) == strip(loc.getLng())
+       assert loc == underTest.getByCode('code')
     }
 
-    private BigDecimal strip(BigDecimal src) {
-        return src.stripTrailingZeros()
+    private Location rndLocation(String  code = 'code') {
+        return new Location(code, 10.1 as BigDecimal, 15.2 as BigDecimal, ZoneId.systemDefault())
     }
 
 }

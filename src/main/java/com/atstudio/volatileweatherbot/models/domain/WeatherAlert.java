@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,4 +16,5 @@ public class WeatherAlert {
     private AlertWeatherType alertWeatherType;
     private String locationLabel;
     private String locationCode;
+    private LocalTime localAlertTime;
 }

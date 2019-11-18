@@ -8,6 +8,7 @@ import com.atstudio.volatileweatherbot.models.dto.InitStage;
 import com.atstudio.volatileweatherbot.models.domain.WeatherAlert;
 import com.atstudio.volatileweatherbot.repository.location.LocationRepository;
 import com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepository;
+import com.atstudio.volatileweatherbot.services.external.geo.TimeZoneResolver;
 import com.atstudio.volatileweatherbot.services.util.BotMessageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,16 +23,19 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
     private final LocationRepository locationRepository;
     private final TgApiExecutor executor;
     private final BotMessageProvider messageProvider;
+    private final TimeZoneResolver timeZoneResolver;
 
     @Autowired
     public SaveAlertStageProcessor(AlertRepository repository,
                                    LocationRepository locationRepository,
                                    TgApiExecutor executor,
-                                   BotMessageProvider messageProvider) {
+                                   BotMessageProvider messageProvider,
+                                   TimeZoneResolver timeZoneResolver) {
         this.alertRepository = repository;
         this.locationRepository = locationRepository;
         this.executor = executor;
         this.messageProvider = messageProvider;
+        this.timeZoneResolver = timeZoneResolver;
     }
 
     @Override
@@ -71,7 +75,8 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
         return new Location(
                 cityDto.getCode(),
                 cityDto.getLat(),
-                cityDto.getLng()
+                cityDto.getLng(),
+                timeZoneResolver.timeZoneForCoordinates(cityDto.getLat(), cityDto.getLng())
         );
     }
 }

@@ -50,4 +50,12 @@
             <column name="location_code"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="7" author="anton">
+        <addColumn tableName="t_weather_alerts">
+            <column name="alert_time" type="TIME WITHOUT TIMEZONE"/>
+        </addColumn>
+        <addNotNullConstraint tableName="t_weather_alerts" columnName="alert_time"/>
+    </changeSet>
+
 </databaseChangeLog>
