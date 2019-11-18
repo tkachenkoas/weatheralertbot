@@ -1,0 +1,23 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="anton">
+        <createTable tableName="t_forecast_details">
+            <column name="forecast_uuid" type="VARCHAR(64)"/>
+            <column name="serialized_value" type="VARCHAR(1000)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="anton">
+        <addForeignKeyConstraint baseTableName="t_forecast_details"
+                                 baseColumnNames="forecast_uuid"
+                                 constraintName="FK_forecast_uuid"
+                                 referencedTableName="t_weather_forecasts"
+                                 referencedColumnNames="uuid"/>
+    </changeSet>
+
+</databaseChangeLog>

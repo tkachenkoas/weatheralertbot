@@ -10,6 +10,10 @@ public interface EntityColumns<T> {
     Function<T, Object> getPropAccessor();
     PropSetter<T> getPropSetter();
 
+    static String colName(EntityColumns column) {
+        return column.getColName();
+    }
+
     default void setProp(T object, ResultSet rs) throws SQLException {
         getPropSetter().setProp(object, rs, getColName());
     }

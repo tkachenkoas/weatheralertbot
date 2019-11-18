@@ -7,7 +7,6 @@ import com.atstudio.volatileweatherbot.models.domain.forecast.WeatherForecast
 import com.atstudio.volatileweatherbot.services.external.weather.OpenWeatherMapApiAccessor
 import com.atstudio.volatileweatherbot.services.external.weather.OpenWeatherMapForecastProvider
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
@@ -17,13 +16,13 @@ import java.time.Month
 
 import static java.time.LocalDateTime.of
 import static org.mockito.ArgumentMatchers.eq
+import static org.mockito.Mockito.when
 import static org.mockito.MockitoAnnotations.initMocks
 
 class OpenWeatherMapForecastProviderTest {
 
     OpenWeatherMapForecastProvider underTest
-    @Mock
-    OpenWeatherMapApiAccessor accessor
+    @Mock OpenWeatherMapApiAccessor accessor
 
     @BeforeMethod
     void init() {
@@ -35,7 +34,7 @@ class OpenWeatherMapForecastProviderTest {
     void testConvert() {
         Location testLocation = new Location('city', 10.0 as BigDecimal, 15.0 as BigDecimal)
 
-        Mockito.when(accessor.getHourlyForecast(eq(testLocation)))
+        when(accessor.getHourlyForecast(eq(testLocation)))
                 .thenReturn(TestJsonHelper.getWeatherForecast('clouds-rain.json'))
 
         WeatherForecast forecast = underTest.getClosestForecastForLocation(testLocation)

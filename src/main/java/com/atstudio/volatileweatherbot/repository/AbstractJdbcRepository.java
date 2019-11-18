@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
@@ -40,6 +41,10 @@ public class AbstractJdbcRepository<T> {
 
     protected SqlParameterSource paramSource(Map<String, Object> values) {
         return new MapSqlParameterSource(values);
+    }
+
+    protected String generateUuid() {
+        return UUID.randomUUID().toString();
     }
 
 }

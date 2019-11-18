@@ -1,7 +1,9 @@
 package com.atstudio.volatileweatherbot.bot
 
 import com.atstudio.volatileweatherbot.BotApplication
+import com.atstudio.volatileweatherbot.TestJsonHelper
 import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleApiAccessor
+import com.atstudio.volatileweatherbot.services.external.weather.OpenWeatherMapApiAccessor
 import org.springframework.boot.test.autoconfigure.data.jdbc.AutoConfigureDataJdbc
 import org.springframework.context.annotation.*
 import org.springframework.test.context.ActiveProfiles
@@ -38,6 +40,14 @@ class BotTestConfigExcludingTgBeans {
         def mock = mock(GoogleApiAccessor)
         when(mock.getGeocodings(any()))
                 .thenReturn(geocodingsFromFile('single-result.json'))
+        return mock
+    }
+
+    @Bean
+    OpenWeatherMapApiAccessor openWeatherMapApiAccessor() {
+        def mock = mock(OpenWeatherMapApiAccessor)
+        when(mock.getHourlyForecast(any()))
+                .thenReturn(TestJsonHelper.getWeatherForecast('clouds-rain.json'))
         return mock
     }
 

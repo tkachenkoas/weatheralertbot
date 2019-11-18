@@ -13,26 +13,34 @@ import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 import static com.atstudio.volatileweatherbot.TestJsonHelper.getPlainMessageUpdate
+import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.LOCATIONS_TABLE_NAME
+import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAlertColumns.WEATHER_ALERTS_TABLE
+import static com.atstudio.volatileweatherbot.repository.weatherforecast.WeatherForecastColumns.WEATHER_FORECAST_TABLE
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTableWhere
+import static org.springframework.test.jdbc.JdbcTestUtils.deleteFromTables
 
 @ContextConfiguration(classes = BotTestConfigExcludingTgBeans)
 @DirtiesContext
 class UpdateHandlerIT extends AbstractTestNGSpringContextTests {
 
-    @Autowired UpdateHandler updateHandler
-    @Autowired JdbcTemplate template
-    @Autowired TgApiExecutor executor
+    @Autowired
+    UpdateHandler updateHandler
+    @Autowired
+    JdbcTemplate template
+    @Autowired
+    TgApiExecutor executor
 
-    @Autowired List<BotApiMethod> executedMethods
+    @Autowired
+    List<BotApiMethod> executedMethods
 
     @BeforeMethod
     @AfterMethod
     void clean() {
-        JdbcTestUtils.deleteFromTables(template, "t_weather_alerts")
+        deleteFromTables(template, WEATHER_ALERTS_TABLE, LOCATIONS_TABLE_NAME, WEATHER_FORECAST_TABLE)
     }
 
     @Test
-    void fullAlertCreationSceneryCanBeExecuted()  {
+    void fullAlertCreationSceneryCanBeExecuted() {
         // Initiating weather alert subscription
         updateHandler.handle(getPlainMessageUpdate("/subscribe"))
 
@@ -44,7 +52,7 @@ class UpdateHandlerIT extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    void defaultCreatedAlertTypeIsRain()  {
+    void defaultCreatedAlertTypeIsRain() {
         // init
         updateHandler.handle(getPlainMessageUpdate("/subscribe"))
         // City

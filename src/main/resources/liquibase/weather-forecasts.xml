@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="anton">
+        <createTable tableName="t_weather_forecasts">
+            <column name="uuid" type="VARCHAR(64)"/>
+            <column name="location_code" type="VARCHAR(512)"/>
+            <column name="period_start" type="TIMESTAMP WITHOUT TIMEZONE"/>
+            <column name="period_end" type="TIMESTAMP WITHOUT TIMEZONE"/>
+            <column name="update_time" type="TIMESTAMP WITH TIMEZONE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="anton">
+        <addUniqueConstraint tableName="t_weather_forecasts"
+                             constraintName="PK_weather_forecasts"
+                             columnNames="uuid"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -29,8 +29,8 @@ class LocationRepositoryImplTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     @AfterMethod
     void cleanDb() {
-        deleteFromTables(template, "t_locations")
         deleteFromTables(template, "t_weather_alerts")
+        deleteFromTables(template, "t_locations")
     }
 
     @Test

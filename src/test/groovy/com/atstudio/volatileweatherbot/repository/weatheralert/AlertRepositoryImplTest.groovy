@@ -24,10 +24,13 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
     @AfterMethod
     void cleanDb() {
         JdbcTestUtils.deleteFromTables(template, "t_weather_alerts")
+        JdbcTestUtils.deleteFromTables(template, "t_locations")
     }
 
     @Test
-    void willSaveAndRetreiveAlert() {
+    void willSaveAndRetrieveAlert() {
+        template.update("INSERT into t_locations (code, lat, lng) values ('cityCode', 10, 15)")
+
         WeatherAlert alert = someAlert()
 
         underTest.save(alert)

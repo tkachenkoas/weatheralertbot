@@ -1,6 +1,7 @@
 package com.atstudio.volatileweatherbot.bot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,8 @@ public class VolatileWeatherBot extends TelegramLongPollingBot {
     private String botToken;
 
     private final UpdateHandler handler;
+
+    @Qualifier("update")
     private final TaskExecutor updateExecutor;
 
     @Autowired

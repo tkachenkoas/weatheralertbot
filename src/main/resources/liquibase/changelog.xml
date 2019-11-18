@@ -7,5 +7,7 @@
 
     <include file="weather-alerts.xml" relativeToChangelogFile="true"/>
     <include file="locations.xml" relativeToChangelogFile="true"/>
+    <include file="weather-forecasts.xml" relativeToChangelogFile="true"/>
+    <include file="forecast-details.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
