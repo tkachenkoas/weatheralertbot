@@ -8,10 +8,13 @@ import org.springframework.context.annotation.Import
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
-import org.springframework.test.jdbc.JdbcTestUtils
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
+
+import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.LOCATIONS_TABLE_NAME
+import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAlertColumns.WEATHER_ALERTS_TABLE
+import static org.springframework.test.jdbc.JdbcTestUtils.deleteFromTables
 
 @ContextConfiguration(classes = RepoConfig)
 @Import(AlertRepositoryImpl)
@@ -23,13 +26,12 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     @AfterMethod
     void cleanDb() {
-        JdbcTestUtils.deleteFromTables(template, "t_weather_alerts")
-        JdbcTestUtils.deleteFromTables(template, "t_locations")
+        deleteFromTables(template, WEATHER_ALERTS_TABLE, LOCATIONS_TABLE_NAME)
     }
 
     @Test
     void willSaveAndRetrieveAlert() {
-        template.update("INSERT into t_locations (code, lat, lng) values ('cityCode', 10, 15)")
+        template.update("INSERT INTO t_locations (code, lat, lng) values ('cityCode', 10, 15)")
 
         WeatherAlert alert = someAlert()
 

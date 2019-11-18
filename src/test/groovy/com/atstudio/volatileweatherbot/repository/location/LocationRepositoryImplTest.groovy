@@ -13,7 +13,9 @@ import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
+import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.LOCATIONS_TABLE_NAME
 import static com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepositoryImplTest.someAlert
+import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAlertColumns.WEATHER_ALERTS_TABLE
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTableWhere
 import static org.springframework.test.jdbc.JdbcTestUtils.deleteFromTables
 
@@ -29,8 +31,7 @@ class LocationRepositoryImplTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     @AfterMethod
     void cleanDb() {
-        deleteFromTables(template, "t_weather_alerts")
-        deleteFromTables(template, "t_locations")
+        deleteFromTables(template, WEATHER_ALERTS_TABLE, LOCATIONS_TABLE_NAME)
     }
 
     @Test
@@ -40,7 +41,7 @@ class LocationRepositoryImplTest extends AbstractTestNGSpringContextTests {
         underTest.createIfNotExists(loc)
         assert countRowsInTableWhere(
                 template,
-                "t_locations",
+                LOCATIONS_TABLE_NAME,
                 "code = '${loc.getCode()}' and lat=${loc.getLat()} and lng=${loc.getLng()}") == 1
     }
 
@@ -53,7 +54,7 @@ class LocationRepositoryImplTest extends AbstractTestNGSpringContextTests {
 
         assert countRowsInTableWhere(
                 template,
-                "t_locations",
+                LOCATIONS_TABLE_NAME,
                 "code = '${loc.getCode()}' and lat=${loc.getLat()} and lng=${loc.getLng()}") == 1
     }
 

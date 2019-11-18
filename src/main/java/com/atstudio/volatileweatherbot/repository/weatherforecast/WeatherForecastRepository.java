@@ -9,6 +9,6 @@ public interface WeatherForecastRepository {
 
     WeatherForecast storeForecast(WeatherForecast forecast);
 
-    WeatherForecast getLocationForecastForLocalTime(Location location, LocalDateTime dateTime);
+    WeatherForecast getLatestLocationForecastForLocalTime(Location location, LocalDateTime dateTime);
 
 }

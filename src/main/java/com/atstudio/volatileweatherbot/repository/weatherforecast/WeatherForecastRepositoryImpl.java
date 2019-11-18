@@ -62,7 +62,7 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
 
 
     @Override
-    public WeatherForecast getLocationForecastForLocalTime(Location location, LocalDateTime dateTime) {
+    public WeatherForecast getLatestLocationForecastForLocalTime(Location location, LocalDateTime dateTime) {
         String forecastColumns = joinColumnNames(",", "wf.", values());
         String detailsColumns = Stream.of(DETAILS_FORECAST_UUID_COL, DETAILS_SERIALIZED_VALUE_COL)
                                         .map(col -> "fd." + col).collect(joining(","));
@@ -70,7 +70,11 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
                 " FROM " + WEATHER_FORECAST_TABLE + " wf LEFT JOIN " + FORECAST_DETAILS_TABLE + " fd ON " +
                 " wf." + colName(UUID) + " = fd." + DETAILS_FORECAST_UUID_COL + " \n " +
                 " WHERE wf." + colName(LOCATION_CODE) + " = :loc_code" +
-                "       AND :date_time BETWEEN wf." + colName(PERIOD_START) + " AND wf." + colName(PERIOD_END);
+                "       AND :date_time BETWEEN wf." + colName(PERIOD_START) + " AND wf." + colName(PERIOD_END) +
+                "       AND " + colName(UPDATE_TIME) + " = (" +
+                "           SELECT MAX(" + colName(UPDATE_TIME) + ") FROM " + WEATHER_FORECAST_TABLE +
+                "           WHERE " + colName(LOCATION_CODE) + " = :loc_code" +
+                "       )";
 
         return jdbcTemplate.query(
                 joinedQuery,

@@ -19,10 +19,12 @@ import org.testng.annotations.Test
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.Month
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.ThreadLocalRandom
 
 import static com.atstudio.volatileweatherbot.repository.weatherforecast.WeatherForecastColumns.FORECAST_DETAILS_TABLE
 import static com.atstudio.volatileweatherbot.repository.weatherforecast.WeatherForecastColumns.WEATHER_FORECAST_TABLE
+import static java.time.Instant.now
 import static java.time.LocalDateTime.of
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTableWhere
@@ -57,7 +59,7 @@ class WeatherForecastRepositoryImplTest extends AbstractTestNGSpringContextTests
         WeatherForecast source = testForecast()
         underTest.storeForecast(source)
 
-        WeatherForecast stored = underTest.getLocationForecastForLocalTime(
+        WeatherForecast stored = underTest.getLatestLocationForecastForLocalTime(
                 [code: source.getLocationCode()] as Location,
                 of(2019, Month.NOVEMBER, 20, 15, 00)
         )
@@ -65,12 +67,28 @@ class WeatherForecastRepositoryImplTest extends AbstractTestNGSpringContextTests
         assert stored == source
     }
 
-    private static WeatherForecast testForecast() {
+    @Test
+    void ofTwoForecastsWillChooseLatest() {
+        WeatherForecast latest = testForecast()
+        underTest.storeForecast(latest)
+
+        WeatherForecast earlier = testForecast(now().minus(1, ChronoUnit.HOURS))
+        earlier.getDetails().add(testDetails(earlier.getPeriodStart().plusHours(4)))
+        underTest.storeForecast(earlier)
+
+        WeatherForecast stored = underTest.getLatestLocationForecastForLocalTime(
+                [code: latest.getLocationCode()] as Location,
+                of(2019, Month.NOVEMBER, 20, 15, 00)
+        )
+        assert stored == latest
+    }
+
+    private static WeatherForecast testForecast(Instant updateTime = now()) {
         WeatherForecast forecast = new WeatherForecast()
         forecast.setLocationCode('code')
         forecast.setPeriodStart(of(2019, Month.NOVEMBER, 20, 8, 00))
         forecast.setPeriodEnd(of(2019, Month.NOVEMBER, 20, 20, 00))
-        forecast.setUpdateTime(Instant.now())
+        forecast.setUpdateTime(updateTime)
         forecast.setDetails([
                 testDetails(forecast.getPeriodStart()),
                 testDetails(forecast.getPeriodEnd())
