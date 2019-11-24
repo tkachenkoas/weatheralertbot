@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.LocalTime;
+
 @Service
 public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
 
@@ -66,6 +68,7 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
         return WeatherAlert.builder()
                 .chatId(initDto.getChatId())
                 .locationCode(initDto.getCity().getCode())
+                .localAlertTime(LocalTime.of(8, 0))
                 .alertWeatherType(initDto.getAlertWeatherType())
                 .locationLabel(initDto.getCity().getShortName())
                 .build();

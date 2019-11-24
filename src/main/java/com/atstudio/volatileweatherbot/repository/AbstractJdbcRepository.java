@@ -2,14 +2,12 @@ package com.atstudio.volatileweatherbot.repository;
 
 import com.atstudio.volatileweatherbot.repository.columns.EntityColumns;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Stream;
 
+import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.paramSource;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
@@ -37,14 +35,6 @@ public class AbstractJdbcRepository<T> {
                         " VALUES (" + paramsList + ") ON CONFLICT DO NOTHING",
                 paramSource(paramValues)
         );
-    }
-
-    protected SqlParameterSource paramSource(Map<String, Object> values) {
-        return new MapSqlParameterSource(values);
-    }
-
-    protected String generateUuid() {
-        return UUID.randomUUID().toString();
     }
 
 }

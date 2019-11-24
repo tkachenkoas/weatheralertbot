@@ -5,5 +5,5 @@ import com.atstudio.volatileweatherbot.models.domain.Location;
 import java.util.List;
 
 public interface ForecastRefreshDao {
-    List<Location> getLocationsForRefresh();
+    List<Location> getLocationsForForecastRefresh();
 }

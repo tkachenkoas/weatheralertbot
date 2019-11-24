@@ -15,7 +15,7 @@ public enum WeatherAlertColumns implements EntityColumns<WeatherAlert> {
             alert -> alert.getAlertWeatherType().name(),
             (obj, rs, col) -> obj.setAlertWeatherType(AlertWeatherType.valueOf(rs.getString(col)))
     ),
-    LOCATION_CODE("location_code", WeatherAlert::getLocationCode, (obj, rs, col) -> obj.setLocationCode(rs.getString(col))),
+    ALERT_LOCATION_CODE("location_code", WeatherAlert::getLocationCode, (obj, rs, col) -> obj.setLocationCode(rs.getString(col))),
     LOCATION_LABEL("location_label", WeatherAlert::getLocationLabel, (obj, rs, col) -> obj.setLocationLabel(rs.getString(col))),
     ALERT_TIME("alert_time",
             WeatherAlert::getLocalAlertTime,

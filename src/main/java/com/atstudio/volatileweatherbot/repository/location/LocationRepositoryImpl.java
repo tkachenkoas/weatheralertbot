@@ -6,9 +6,10 @@ import com.google.common.collect.ImmutableMap;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.paramSource;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumns.colName;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
-import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.CODE;
+import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.LOCATION_CODE;
 import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.LOCATIONS_TABLE_NAME;
 
 @Repository
@@ -24,7 +25,7 @@ public class LocationRepositoryImpl extends AbstractJdbcRepository<Location> imp
         return jdbcTemplate.queryForObject(
                 " SELECT " + joinColumnNames(",", LocationColumns.values()) +
                         " FROM " + LOCATIONS_TABLE_NAME +
-                        " WHERE " + colName(CODE) + "= :code",
+                        " WHERE " + colName(LOCATION_CODE) + "= :code",
                 paramSource(ImmutableMap.of("code", locationCode)),
                 rowMapper
         );

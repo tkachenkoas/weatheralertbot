@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Collections;
 import java.util.List;
 
+import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.paramSource;
+import static com.atstudio.volatileweatherbot.repository.columns.EntityColumns.colName;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
-import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAlertColumns.LOCATION_CODE;
+import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAlertColumns.ALERT_LOCATION_CODE;
 import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAlertColumns.WEATHER_ALERTS_TABLE;
 
 @Repository
@@ -25,7 +27,7 @@ public class AlertRepositoryImpl extends AbstractJdbcRepository<WeatherAlert> im
         return jdbcTemplate.query(
                 " SELECT " + joinColumnNames(",", WeatherAlertColumns.values()) +
                      " FROM " + WEATHER_ALERTS_TABLE +
-                     " WHERE " + LOCATION_CODE + "=:locationCode",
+                     " WHERE " + colName(ALERT_LOCATION_CODE) + "=:locationCode",
                 paramSource(Collections.singletonMap("locationCode", locationCode)),
                 rowMapper
         );

@@ -15,7 +15,7 @@ public enum WeatherForecastColumns implements EntityColumns<WeatherForecast> {
             WeatherForecast::getUuid,
             (obj, rs, column) -> obj.setUuid(rs.getString(column))
     ),
-    LOCATION_CODE(
+    FORECAST_LOCATION_CODE(
             "location_code",
             WeatherForecast::getLocationCode,
             (obj, rs, column) -> obj.setLocationCode(rs.getString(column))

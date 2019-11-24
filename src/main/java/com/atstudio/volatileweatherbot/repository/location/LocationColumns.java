@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 @Getter
 public enum LocationColumns implements EntityColumns<Location> {
-    CODE("code", Location::getCode, (obj, rs, col) -> obj.setCode(rs.getString(col))),
+    LOCATION_CODE("code", Location::getCode, (obj, rs, col) -> obj.setCode(rs.getString(col))),
     LAT("lat", Location::getLat, (obj, rs, col) -> obj.setLat(rs.getBigDecimal(col).stripTrailingZeros())),
     LNG("lng", Location::getLng, (obj, rs, col) -> obj.setLng(rs.getBigDecimal(col).stripTrailingZeros())),
     TIMEZONE("timezone", loc -> loc.getTimeZone().getId(), (obj, rs, col) -> obj.setTimeZone(ZoneId.of(rs.getString(col))));

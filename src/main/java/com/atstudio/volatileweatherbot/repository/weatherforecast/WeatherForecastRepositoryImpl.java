@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.generateUuid;
+import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.paramSource;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumns.colName;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
 import static com.atstudio.volatileweatherbot.repository.weatherforecast.WeatherForecastColumns.*;
@@ -69,11 +71,11 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
         String joinedQuery = "SELECT " + forecastColumns + ", " + detailsColumns + " \n " +
                 " FROM " + WEATHER_FORECAST_TABLE + " wf LEFT JOIN " + FORECAST_DETAILS_TABLE + " fd ON " +
                 " wf." + colName(UUID) + " = fd." + DETAILS_FORECAST_UUID_COL + " \n " +
-                " WHERE wf." + colName(LOCATION_CODE) + " = :loc_code" +
+                " WHERE wf." + colName(FORECAST_LOCATION_CODE) + " = :loc_code" +
                 "       AND :date_time BETWEEN wf." + colName(PERIOD_START) + " AND wf." + colName(PERIOD_END) +
                 "       AND " + colName(UPDATE_TIME) + " = (" +
                 "           SELECT MAX(" + colName(UPDATE_TIME) + ") FROM " + WEATHER_FORECAST_TABLE +
-                "           WHERE " + colName(LOCATION_CODE) + " = :loc_code" +
+                "           WHERE " + colName(FORECAST_LOCATION_CODE) + " = :loc_code" +
                 "       )";
 
         return jdbcTemplate.query(
