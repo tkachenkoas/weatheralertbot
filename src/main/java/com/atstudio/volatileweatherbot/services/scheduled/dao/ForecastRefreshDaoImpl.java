@@ -3,7 +3,6 @@ package com.atstudio.volatileweatherbot.services.scheduled.dao;
 import com.atstudio.volatileweatherbot.models.domain.Location;
 import com.atstudio.volatileweatherbot.repository.AbstractJdbcRepository;
 import com.atstudio.volatileweatherbot.repository.location.LocationColumns;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,13 +14,13 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.paramSource;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumns.colName;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
 import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.*;
 import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAlertColumns.*;
 import static com.atstudio.volatileweatherbot.repository.weatherforecast.WeatherForecastColumns.*;
 import static java.lang.String.format;
+import static java.util.Collections.singletonMap;
 
 @Repository
 public class ForecastRefreshDaoImpl extends AbstractJdbcRepository implements ForecastRefreshDao {
@@ -54,7 +53,7 @@ public class ForecastRefreshDaoImpl extends AbstractJdbcRepository implements Fo
 
         return jdbcTemplate.query(
                 queryBuilder.toString(),
-                paramSource(ImmutableMap.of("now", new Timestamp(Instant.now().toEpochMilli()))),
+                singletonMap("now", new Timestamp(Instant.now().toEpochMilli())),
                 locationRowMapper
         );
     }

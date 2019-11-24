@@ -8,17 +8,16 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.generateUuid;
-import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.paramSource;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumns.colName;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
 import static com.atstudio.volatileweatherbot.repository.weatherforecast.WeatherForecastColumns.*;
@@ -46,15 +45,14 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
             return;
         }
 
-        SqlParameterSource[] batchParamSource = details.stream()
-                .map(detail -> paramSource(
+        Map[] batchParamSource = details.stream()
+                .map(detail ->
                         ImmutableMap.<String, Object>builder()
                                 .put(DETAILS_FORECAST_UUID_COL, forecastUuid)
                                 .put(DETAILS_SERIALIZED_VALUE_COL, SERIALIZER.toJson(detail))
                                 .build()
-                        )
                 )
-                .toArray(SqlParameterSource[]::new);
+                .toArray(Map[]::new);
         jdbcTemplate.batchUpdate(
                 format("INSERT INTO %1$s (%2$s, %3$s) VALUES (:%2$s,:%3$s)", FORECAST_DETAILS_TABLE, DETAILS_FORECAST_UUID_COL, DETAILS_SERIALIZED_VALUE_COL),
                 batchParamSource
@@ -67,7 +65,7 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
     public WeatherForecast getLatestLocationForecastForLocalTime(Location location, LocalDateTime dateTime) {
         String forecastColumns = joinColumnNames(",", "wf.", values());
         String detailsColumns = Stream.of(DETAILS_FORECAST_UUID_COL, DETAILS_SERIALIZED_VALUE_COL)
-                                        .map(col -> "fd." + col).collect(joining(","));
+                .map(col -> "fd." + col).collect(joining(","));
         String joinedQuery = "SELECT " + forecastColumns + ", " + detailsColumns + " \n " +
                 " FROM " + WEATHER_FORECAST_TABLE + " wf LEFT JOIN " + FORECAST_DETAILS_TABLE + " fd ON " +
                 " wf." + colName(UUID) + " = fd." + DETAILS_FORECAST_UUID_COL + " \n " +
@@ -80,11 +78,10 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
 
         return jdbcTemplate.query(
                 joinedQuery,
-                paramSource(ImmutableMap.<String, Object>builder()
+                ImmutableMap.<String, Object>builder()
                         .put("loc_code", location.getCode())
                         .put("date_time", dateTime)
-                        .build()
-                ),
+                        .build(),
                 extractor()
         );
     }
@@ -96,7 +93,7 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
             while (rs.next()) {
                 if (forecast == null) {
                     forecast = new WeatherForecast();
-                    for (WeatherForecastColumns columns: WeatherForecastColumns.values()) {
+                    for (WeatherForecastColumns columns : WeatherForecastColumns.values()) {
                         columns.setProp(forecast, rs);
                     }
                 }

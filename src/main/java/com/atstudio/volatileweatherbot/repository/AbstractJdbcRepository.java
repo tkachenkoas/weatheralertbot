@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.paramSource;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
@@ -33,7 +32,7 @@ public class AbstractJdbcRepository<T> {
                 " INSERT INTO " + tableName +
                         "(" + joinColumnNames(",", fields) + ")" +
                         " VALUES (" + paramsList + ") ON CONFLICT DO NOTHING",
-                paramSource(paramValues)
+                paramValues
         );
     }
 
