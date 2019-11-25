@@ -58,4 +58,40 @@
         <addNotNullConstraint tableName="t_weather_alerts" columnName="alert_time"/>
     </changeSet>
 
+    <changeSet id="8" author="anton">
+        <dropUniqueConstraint tableName="t_weather_alerts" constraintName="WA_CHAT_LOCATION"/>
+    </changeSet>
+
+    <changeSet id="9" author="anton">
+        <addColumn tableName="t_weather_alerts">
+            <column name="uuid" type="VARCHAR(64)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="10" author="anton">
+        <addPrimaryKey tableName="t_weather_alerts" constraintName="PK_weather_alerts" columnNames="uuid"/>
+    </changeSet>
+
+    <changeSet id="9" author="anton">
+        <addColumn tableName="t_weather_alerts">
+            <column name="uuid" type="VARCHAR(64)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="10" author="anton">
+        <addPrimaryKey tableName="t_weather_alerts" constraintName="PK_weather_alerts" columnNames="uuid"/>
+    </changeSet>
+
+    <changeSet id="11" author="anton">
+        <addColumn tableName="t_weather_alerts">
+            <column name="next_check_date" type="date"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="12" author="anton">
+        <createIndex tableName="t_weather_alerts" indexName="IDX_next_check_date">
+            <column name="next_check_date"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

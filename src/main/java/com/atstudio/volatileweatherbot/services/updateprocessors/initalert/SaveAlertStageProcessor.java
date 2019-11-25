@@ -2,10 +2,10 @@ package com.atstudio.volatileweatherbot.services.updateprocessors.initalert;
 
 import com.atstudio.volatileweatherbot.bot.TgApiExecutor;
 import com.atstudio.volatileweatherbot.models.domain.Location;
+import com.atstudio.volatileweatherbot.models.domain.WeatherAlert;
 import com.atstudio.volatileweatherbot.models.dto.AlertInitDto;
 import com.atstudio.volatileweatherbot.models.dto.CityDto;
 import com.atstudio.volatileweatherbot.models.dto.InitStage;
-import com.atstudio.volatileweatherbot.models.domain.WeatherAlert;
 import com.atstudio.volatileweatherbot.repository.location.LocationRepository;
 import com.atstudio.volatileweatherbot.repository.weatheralert.AlertRepository;
 import com.atstudio.volatileweatherbot.services.external.geo.TimeZoneResolver;
@@ -48,14 +48,18 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
     @Override
     @Transactional
     protected AlertInitDto processingPhase(Update update, AlertInitDto initDto) {
+        Location location = toLocation(initDto.getCity());
+        locationRepository.createIfNotExists(location);
+        WeatherAlert alert = alertRepository.save(toWeatherAlert(initDto));
+        if (LocalTime.now(location.getTimeZone()).isAfter(alert.getLocalAlertTime())) {
+            alertRepository.postponeAlertForTomorrow(alert);
+        }
         executor.execute(
                 new SendMessage(
                         initDto.getChatId(),
                         messageProvider.getMessage("alert-created")
                 )
         );
-        locationRepository.createIfNotExists(toLocation(initDto.getCity()));
-        alertRepository.save(toWeatherAlert(initDto));
         return doneProcessing(initDto);
     }
 

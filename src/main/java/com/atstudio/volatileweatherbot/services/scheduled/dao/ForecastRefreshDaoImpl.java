@@ -8,12 +8,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.toTimeStamp;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumns.colName;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
 import static com.atstudio.volatileweatherbot.repository.location.LocationColumns.*;
@@ -53,7 +53,7 @@ public class ForecastRefreshDaoImpl extends AbstractJdbcRepository implements Fo
 
         return jdbcTemplate.query(
                 queryBuilder.toString(),
-                singletonMap("now", new Timestamp(Instant.now().toEpochMilli())),
+                singletonMap("now", toTimeStamp(Instant.now())),
                 locationRowMapper
         );
     }

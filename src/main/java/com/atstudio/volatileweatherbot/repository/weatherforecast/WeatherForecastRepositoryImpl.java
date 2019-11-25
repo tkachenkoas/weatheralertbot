@@ -54,7 +54,8 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
                 )
                 .toArray(Map[]::new);
         jdbcTemplate.batchUpdate(
-                format("INSERT INTO %1$s (%2$s, %3$s) VALUES (:%2$s,:%3$s)", FORECAST_DETAILS_TABLE, DETAILS_FORECAST_UUID_COL, DETAILS_SERIALIZED_VALUE_COL),
+                format("INSERT INTO %1$s (%2$s, %3$s) VALUES (:%2$s,:%3$s)",
+                        FORECAST_DETAILS_TABLE, DETAILS_FORECAST_UUID_COL, DETAILS_SERIALIZED_VALUE_COL),
                 batchParamSource
         );
 

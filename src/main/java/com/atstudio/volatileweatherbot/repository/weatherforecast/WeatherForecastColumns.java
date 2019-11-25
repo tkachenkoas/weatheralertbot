@@ -5,8 +5,9 @@ import com.atstudio.volatileweatherbot.repository.columns.EntityColumns;
 import com.atstudio.volatileweatherbot.repository.columns.PropSetter;
 import lombok.Getter;
 
-import java.sql.Timestamp;
 import java.util.function.Function;
+
+import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.toTimeStamp;
 
 @Getter
 public enum WeatherForecastColumns implements EntityColumns<WeatherForecast> {
@@ -32,7 +33,7 @@ public enum WeatherForecastColumns implements EntityColumns<WeatherForecast> {
     ),
     UPDATE_TIME(
             "update_time",
-            (obj) -> new Timestamp(obj.getUpdateTime().toEpochMilli()),
+            (obj) -> toTimeStamp(obj.getUpdateTime()),
             (obj, rs, column) -> obj.setUpdateTime(rs.getTimestamp(column).toInstant())
     );
 

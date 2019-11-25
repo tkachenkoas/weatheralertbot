@@ -33,7 +33,7 @@ public class WeatherForecastRefresher {
     }
 
     @Scheduled(fixedRateString = "${scheduled.forecast-refresh.delay}")
-    void refreshWeatherForecast() {
+    public void refreshWeatherForecast() {
         List<Location> locations = forecastRefreshDao.getLocationsForForecastRefresh();
         locations.forEach(location -> asyncExecutor.execute(() -> {
             WeatherForecast forLocation = weatherForecastProvider.getClosestForecastForLocation(location);

@@ -12,6 +12,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Builder
 public class WeatherAlert {
+    private String uuid;
     private Long chatId;
     private AlertWeatherType alertWeatherType;
     private String locationLabel;

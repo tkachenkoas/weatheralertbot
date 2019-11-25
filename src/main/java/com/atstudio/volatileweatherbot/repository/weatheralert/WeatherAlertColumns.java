@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 @Getter
 public enum WeatherAlertColumns implements EntityColumns<WeatherAlert> {
+    UUID("uuid", WeatherAlert::getUuid, (obj, rs, col) -> obj.setUuid(rs.getString(col))),
     CHAT_ID("chat_id", WeatherAlert::getChatId, (obj, rs, col) -> obj.setChatId(rs.getLong(col))),
     ALERT_TYPE("alert_type",
             alert -> alert.getAlertWeatherType().name(),
@@ -23,6 +24,7 @@ public enum WeatherAlertColumns implements EntityColumns<WeatherAlert> {
     );
 
     public static final String WEATHER_ALERTS_TABLE = "t_weather_alerts";
+    public static final String NEXT_CHECK_DATE_COLUMN = "next_check_date";
 
     private final String colName;
     private final Function<WeatherAlert, Object> propAccessor;

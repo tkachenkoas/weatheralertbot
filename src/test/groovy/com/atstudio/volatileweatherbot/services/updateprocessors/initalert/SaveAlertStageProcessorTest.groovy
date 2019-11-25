@@ -13,6 +13,8 @@ import com.atstudio.volatileweatherbot.services.util.BotMessageProvider
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import org.mockito.invocation.InvocationOnMock
+import org.mockito.stubbing.Answer
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.testng.annotations.BeforeMethod
@@ -36,6 +38,15 @@ class SaveAlertStageProcessorTest {
     @BeforeMethod
     void init() {
         MockitoAnnotations.initMocks(this)
+        when(alertRepository.save(any())).thenAnswer(new Answer<Object>() {
+            @Override
+            Object answer(InvocationOnMock invocation) throws Throwable {
+                def alert = invocation.getArgument(0) as WeatherAlert
+                alert.setUuid('uuid')
+                return alert
+            }
+        })
+
         underTest = new SaveAlertStageProcessor(alertRepository, locationRepository, executor, messageProvider, timeZoneResolver)
     }
 
