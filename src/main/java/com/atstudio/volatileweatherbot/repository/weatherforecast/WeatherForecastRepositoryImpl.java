@@ -1,6 +1,5 @@
 package com.atstudio.volatileweatherbot.repository.weatherforecast;
 
-import com.atstudio.volatileweatherbot.models.domain.Location;
 import com.atstudio.volatileweatherbot.models.domain.forecast.ForecastDetails;
 import com.atstudio.volatileweatherbot.models.domain.forecast.WeatherForecast;
 import com.atstudio.volatileweatherbot.repository.AbstractJdbcRepository;
@@ -22,6 +21,7 @@ import static com.atstudio.volatileweatherbot.repository.columns.EntityColumns.c
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumnsUtils.joinColumnNames;
 import static com.atstudio.volatileweatherbot.repository.weatherforecast.WeatherForecastColumns.*;
 import static java.lang.String.format;
+import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
@@ -61,31 +61,47 @@ public class WeatherForecastRepositoryImpl extends AbstractJdbcRepository<Weathe
 
     }
 
+    @Override
+    public WeatherForecast getLatestForecastForLocation(String locationCode) {
+        String joinedQuery = selectColumnsWithLocationPredicate() + AND_LATEST_UPDATE_PREDICATE;
+        return jdbcTemplate.query(
+                joinedQuery,
+                singletonMap("loc_code", locationCode),
+                extractor()
+        );
+    }
 
     @Override
-    public WeatherForecast getLatestLocationForecastForLocalTime(Location location, LocalDateTime dateTime) {
-        String forecastColumns = joinColumnNames(",", "wf.", values());
-        String detailsColumns = Stream.of(DETAILS_FORECAST_UUID_COL, DETAILS_SERIALIZED_VALUE_COL)
-                .map(col -> "fd." + col).collect(joining(","));
-        String joinedQuery = "SELECT " + forecastColumns + ", " + detailsColumns + " \n " +
-                " FROM " + WEATHER_FORECAST_TABLE + " wf LEFT JOIN " + FORECAST_DETAILS_TABLE + " fd ON " +
-                " wf." + colName(UUID) + " = fd." + DETAILS_FORECAST_UUID_COL + " \n " +
-                " WHERE wf." + colName(FORECAST_LOCATION_CODE) + " = :loc_code" +
-                "       AND :date_time BETWEEN wf." + colName(PERIOD_START) + " AND wf." + colName(PERIOD_END) +
-                "       AND " + colName(UPDATE_TIME) + " = (" +
-                "           SELECT MAX(" + colName(UPDATE_TIME) + ") FROM " + WEATHER_FORECAST_TABLE +
-                "           WHERE " + colName(FORECAST_LOCATION_CODE) + " = :loc_code" +
-                "       )";
+    public WeatherForecast getLatestLocationForecastForLocalTime(String locationCode, LocalDateTime dateTime) {
+        String joinedQuery = selectColumnsWithLocationPredicate() +
+                "   AND :date_time BETWEEN wf." + colName(PERIOD_START) + " AND wf." + colName(PERIOD_END) +
+                AND_LATEST_UPDATE_PREDICATE;
 
         return jdbcTemplate.query(
                 joinedQuery,
                 ImmutableMap.<String, Object>builder()
-                        .put("loc_code", location.getCode())
+                        .put("loc_code", locationCode)
                         .put("date_time", dateTime)
                         .build(),
                 extractor()
         );
     }
+
+    private static String selectColumnsWithLocationPredicate() {
+        String forecastColumns = joinColumnNames(",", "wf.", values());
+        String detailsColumns = Stream.of(DETAILS_FORECAST_UUID_COL, DETAILS_SERIALIZED_VALUE_COL)
+                .map(col -> "fd." + col).collect(joining(","));
+        return "SELECT " + forecastColumns + ", " + detailsColumns + " \n " +
+                " FROM " + WEATHER_FORECAST_TABLE + " wf LEFT JOIN " + FORECAST_DETAILS_TABLE + " fd ON " +
+                " wf." + colName(UUID) + " = fd." + DETAILS_FORECAST_UUID_COL + " \n " +
+                " WHERE wf." + colName(FORECAST_LOCATION_CODE) + " = :loc_code";
+    }
+
+    private static final String AND_LATEST_UPDATE_PREDICATE =
+            "       AND " + colName(UPDATE_TIME) + " = (" +
+            "           SELECT MAX(" + colName(UPDATE_TIME) + ") FROM " + WEATHER_FORECAST_TABLE +
+            "           WHERE " + colName(FORECAST_LOCATION_CODE) + " = :loc_code" +
+            "       )";
 
     private static ResultSetExtractor<WeatherForecast> extractor() {
         return rs -> {

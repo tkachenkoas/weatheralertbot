@@ -18,11 +18,11 @@ public class BotMessageProviderImpl implements BotMessageProvider {
 
     @Override
     public String getMessage(String code) {
-        return getMessage(code, null);
+        return getMessage(code);
     }
 
     @Override
-    public String getMessage(String code, Object[] args) {
+    public String getMessage(String code, Object... args) {
         return messageSource.getMessage(code, args, Locale.ENGLISH);
     }
 }

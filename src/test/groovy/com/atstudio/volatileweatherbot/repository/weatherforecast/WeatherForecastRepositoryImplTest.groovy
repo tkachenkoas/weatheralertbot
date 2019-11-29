@@ -1,7 +1,6 @@
 package com.atstudio.volatileweatherbot.repository.weatherforecast
 
 import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType
-import com.atstudio.volatileweatherbot.models.domain.Location
 import com.atstudio.volatileweatherbot.models.domain.forecast.ForecastDetails
 import com.atstudio.volatileweatherbot.models.domain.forecast.RainInfo
 import com.atstudio.volatileweatherbot.models.domain.forecast.WeatherForecast
@@ -60,7 +59,7 @@ class WeatherForecastRepositoryImplTest extends AbstractTestNGSpringContextTests
         underTest.storeForecast(source)
 
         WeatherForecast stored = underTest.getLatestLocationForecastForLocalTime(
-                [code: source.getLocationCode()] as Location,
+                source.getLocationCode(),
                 of(2019, Month.NOVEMBER, 20, 15, 00)
         )
 
@@ -68,7 +67,7 @@ class WeatherForecastRepositoryImplTest extends AbstractTestNGSpringContextTests
     }
 
     @Test
-    void ofTwoForecastsWillChooseLatest() {
+    void ofTwoForecastsForLocalTimeWillChooseLatest() {
         WeatherForecast latest = testForecast()
         underTest.storeForecast(latest)
 
@@ -77,9 +76,22 @@ class WeatherForecastRepositoryImplTest extends AbstractTestNGSpringContextTests
         underTest.storeForecast(earlier)
 
         WeatherForecast stored = underTest.getLatestLocationForecastForLocalTime(
-                [code: latest.getLocationCode()] as Location,
+                latest.getLocationCode(),
                 of(2019, Month.NOVEMBER, 20, 15, 00)
         )
+        assert stored == latest
+    }
+
+    @Test
+    void willGetLatestForecast() {
+        WeatherForecast latest = testForecast()
+        underTest.storeForecast(latest)
+
+        WeatherForecast earlier = testForecast(now().minus(1, ChronoUnit.HOURS))
+        earlier.getDetails().add(testDetails(earlier.getPeriodStart().plusHours(4)))
+        underTest.storeForecast(earlier)
+
+        WeatherForecast stored = underTest.getLatestForecastForLocation(latest.getLocationCode())
         assert stored == latest
     }
 
