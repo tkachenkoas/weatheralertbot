@@ -68,7 +68,7 @@ public class SpecifyCityStageProcessor extends AbstractInitStageProcessor {
         initDto.setMatchedCities(matchedCities);
         executor.execute(
                 new SendMessage(
-                        getChatId(update), messageSource.getMessage("city-guess", city)
+                        getChatId(update), messageSource.getMessageWithArgs("city-guess", city)
                 ).setReplyMarkup(getReplyMarkup(matchedCities))
         );
         return onProcessingPhase(initDto);

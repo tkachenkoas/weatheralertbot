@@ -9,6 +9,6 @@ public interface ForecastToAlertMatchProcessor {
      * Checks whether given alert matches given forecast. If matches, will add required messages to ChatAlertContext.
      * It's callers responsibility to init and clear ChatAlertContext
      */
-    void checkForecastForAlertMatch(WeatherAlert alert, WeatherForecast forecast);
+    void checkCurrentForecastForAlertMatch(WeatherAlert alert, WeatherForecast currentForecast);
 
 }

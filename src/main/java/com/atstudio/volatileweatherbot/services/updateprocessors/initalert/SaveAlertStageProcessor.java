@@ -18,6 +18,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.LocalTime;
 
+import static java.util.Collections.singletonList;
+
 @Service
 public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
 
@@ -52,7 +54,7 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
         locationRepository.createIfNotExists(location);
         WeatherAlert alert = alertRepository.save(toWeatherAlert(initDto));
         if (LocalTime.now(location.getTimeZone()).isAfter(alert.getLocalAlertTime())) {
-            alertRepository.postponeAlertForTomorrow(alert);
+            alertRepository.postponeAlertForTomorrow(singletonList(alert));
         }
         executor.execute(
                 new SendMessage(

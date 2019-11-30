@@ -46,7 +46,7 @@ class UpdateHandlerIT extends AbstractTestNGSpringContextTests {
 
         // we're asked for a city; since api response is stubbed,
         // one variant will be returned, and alert will be created
-        updateHandler.handle(getPlainMessageUpdate("Some city"))
+        updateHandler.handle(getPlainMessageUpdate("Brisbane"))
 
         assert JdbcTestUtils.countRowsInTable(template, "t_weather_alerts") == 1
     }
@@ -56,7 +56,7 @@ class UpdateHandlerIT extends AbstractTestNGSpringContextTests {
         // init
         updateHandler.handle(getPlainMessageUpdate("/subscribe"))
         // City
-        updateHandler.handle(getPlainMessageUpdate("Some city"))
+        updateHandler.handle(getPlainMessageUpdate("Brisbane"))
         assert countRowsInTableWhere(template, "t_weather_alerts", "alert_type='RAIN'") == 1
     }
 

@@ -18,6 +18,7 @@ import static com.atstudio.volatileweatherbot.repository.weatheralert.WeatherAle
 import static java.lang.String.format;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Collections.singletonMap;
+import static java.util.stream.Collectors.toList;
 
 @Repository
 public class AlertRepositoryImpl extends AbstractJdbcRepository<WeatherAlert> implements AlertRepository {
@@ -62,19 +63,22 @@ public class AlertRepositoryImpl extends AbstractJdbcRepository<WeatherAlert> im
     }
 
     @Override
-    public void postponeAlertForTomorrow(WeatherAlert alert) {
+    public void postponeAlertForTomorrow(List<WeatherAlert> alerts) {
+        if (alerts.isEmpty()) {
+            return;
+        }
         StringBuilder queryBuilder = new StringBuilder()
                 .append(format(" UPDATE %s al \n", WEATHER_ALERTS_TABLE))
                 .append(format(" SET %s = timezone(loc.%2$s, :date)::date \n",
                         NEXT_CHECK_DATE_COLUMN, colName(TIMEZONE)))
                 .append(format(" FROM %s loc WHERE al.%s = loc.%s \n",
                         LOCATIONS_TABLE_NAME, colName(ALERT_LOCATION_CODE), colName(LOCATION_CODE)))
-                .append(format(" AND al.%s = :uuid ", colName(UUID)));
+                .append(format(" AND al.%s in (:uuids) ", colName(UUID)));
 
         jdbcTemplate.update(
                 queryBuilder.toString(),
                 ImmutableMap.<String, Object>builder()
-                        .put("uuid", alert.getUuid())
+                        .put("uuids", alerts.stream().map(WeatherAlert::getUuid).collect(toList()))
                         .put("date", toTimeStamp(Instant.now().plus(1, DAYS)))
                         .build()
         );

@@ -57,7 +57,7 @@ class TriggeredAlertCheckerTest {
         when(forecastRepository.getLatestForecastForLocation(eq('loc2'))).thenReturn(forecast2)
 
         ForecastToAlertMatchProcessor triggeredProcessor = mock(ForecastToAlertMatchProcessor)
-        when(triggeredProcessor.checkForecastForAlertMatch(eq(alert1), eq(forecast1))).thenAnswer(new Answer<Object>() {
+        when(triggeredProcessor.checkCurrentForecastForAlertMatch(eq(alert1), eq(forecast1))).thenAnswer(new Answer<Object>() {
             @Override
             Object answer(InvocationOnMock invocation) throws Throwable {
                 return ChatAlertContext.addChatMessageForLocation(1L, 'label', "Alert message")
@@ -73,7 +73,7 @@ class TriggeredAlertCheckerTest {
 
         //  then
         matchProcessors.each {
-            verify(it, times(2)).checkForecastForAlertMatch(any(WeatherAlert), any(WeatherForecast))
+            verify(it, times(2)).checkCurrentForecastForAlertMatch(any(WeatherAlert), any(WeatherForecast))
         }
 
         ArgumentCaptor<SendMessage> messageCaptor = ArgumentCaptor.forClass(SendMessage)

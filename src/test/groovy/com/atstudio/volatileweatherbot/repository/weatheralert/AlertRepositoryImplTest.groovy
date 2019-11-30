@@ -72,15 +72,18 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    void wontGetPostponedForTomorrowAlert() {
+    void wontGetPostponedForTomorrowAlerts() {
         createTestLocation()
 
-        // Alert should have triggered one minute ago, but we'll postpone it for tomorrow
-        def someAlert = someAlert(brisbaneTimeWithDeviation(0, -1))
-        underTest.save(someAlert)
+        // Alert should have triggered a couple of minutes ago, but we'll postpone it for tomorrow
+        def alert1 = underTest.save(someAlert(brisbaneTimeWithDeviation(0, -2)))
+        def alert2 = underTest.save(someAlert(brisbaneTimeWithDeviation(0, -1)))
+        assert underTest.getTriggeredAlerts().size() == 2
 
-        underTest.postponeAlertForTomorrow(someAlert)
+        // when
+        underTest.postponeAlertForTomorrow([alert1, alert2])
 
+        // then
         def triggered = underTest.getTriggeredAlerts()
         assert triggered.size() == 0
     }

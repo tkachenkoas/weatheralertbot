@@ -7,6 +7,7 @@ import com.atstudio.volatileweatherbot.services.external.geo.googlemaps.GoogleAp
 import com.atstudio.volatileweatherbot.services.external.weather.OpenWeatherMapApiAccessor
 import org.springframework.boot.test.autoconfigure.data.jdbc.AutoConfigureDataJdbc
 import org.springframework.context.annotation.*
+import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.test.context.ActiveProfiles
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.when
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = VolatileWeatherBot.class)
 ])
 @AutoConfigureDataJdbc
+@EnableScheduling
 @ActiveProfiles("integration-tests")
 @PropertySource("classpath:test.properties")
 class BotTestConfigExcludingTgBeans {
@@ -42,14 +44,14 @@ class BotTestConfigExcludingTgBeans {
     GoogleApiAccessor googleApiAccessor() {
         def mock = mock(GoogleApiAccessor)
         when(mock.getGeocodings(any()))
-                .thenReturn(geocodingsFromFile('single-result.json'))
+                .thenReturn(geocodingsFromFile('brisbane-location.json'))
         return mock
     }
 
     @Bean
     TimeZoneResolver resolver() {
         def resolver = mock(TimeZoneResolver)
-        when(resolver.timeZoneForCoordinates(any(), any())).thenReturn(ZoneId.of("Israel"))
+        when(resolver.timeZoneForCoordinates(any(), any())).thenReturn(ZoneId.of("Australia/Brisbane"))
         return resolver
     }
 

@@ -10,5 +10,5 @@ public interface AlertRepository {
     List<WeatherAlert> getForLocation(String locationCode);
 
     List<WeatherAlert> getTriggeredAlerts();
-    void postponeAlertForTomorrow(WeatherAlert alert);
+    void postponeAlertForTomorrow(List<WeatherAlert> alert);
 }
