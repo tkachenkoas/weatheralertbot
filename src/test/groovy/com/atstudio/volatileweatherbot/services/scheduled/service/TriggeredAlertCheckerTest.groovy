@@ -66,7 +66,7 @@ class TriggeredAlertCheckerTest {
 
         matchProcessors.addAll([triggeredProcessor, mock(ForecastToAlertMatchProcessor)])
 
-        when(messageProvider.getMessage(eq('alert-triggered'), eq('label'))).thenReturn('Alert header')
+        when(messageProvider.getMessageWithArgs(eq('alert-triggered'), eq('label'))).thenReturn('Alert header')
 
         //  when
         underTest.checkTriggeredAlerts()

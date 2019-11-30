@@ -65,7 +65,7 @@ class SpecifyCityStageProcessorTest {
         List<CityDto> cityGuesses = initCityGuesses(city)
 
         def keybMessage = 'Message with keyboard'
-        when(messageSource.getMessage(eq('city-guess'), any())).thenReturn(keybMessage)
+        when(messageSource.getMessageWithArgs(eq('city-guess'), any())).thenReturn(keybMessage)
 
         AlertInitDto processing = provideProcessedInitDto(getChatId(update))
 

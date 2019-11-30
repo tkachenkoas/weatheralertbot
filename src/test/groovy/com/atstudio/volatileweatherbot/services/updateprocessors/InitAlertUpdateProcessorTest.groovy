@@ -67,29 +67,6 @@ class InitAlertUpdateProcessorTest extends GroovyTestCase {
     }
 
     @Test
-    void willCallNextPhaseProcessorsWhenPhaseIsDone() {
-        // given
-        Update update = getUpdateFromFile('with-callback-update.json')
-        Long chatId = getChatId(update)
-
-        AlertInitDto cityStarted = new AlertInitDto(chatId)
-        when(cache.getIfPresent(eq(chatId))).thenReturn(cityStarted)
-
-        AlertInitDto cityDone = new AlertInitDto(chatId)
-        cityDone.setPhase(StagePhase.DONE)
-
-        when(cityProcessor.process(any(Update), any(AlertInitDto))).thenReturn(cityDone)
-        when(storeProcessor.process(any(Update), any(AlertInitDto))).thenReturn(cityStarted)
-
-        // when
-        assert underTest.willTakeCareOf(update)
-
-        // then
-        verify(cityProcessor, times(1)).process(any(), any())
-        verify(storeProcessor, times(1)).process(any(), any())
-    }
-
-    @Test
     void willTerminateWhenAlertIsCreated() {
         // given
         Update update = getUpdateFromFile('with-callback-update.json')

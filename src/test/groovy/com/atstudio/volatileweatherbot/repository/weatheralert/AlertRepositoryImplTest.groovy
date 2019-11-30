@@ -89,7 +89,7 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    void tommorowPostponeWithTwoAlerts() {
+    void tomorrowPostponeWithTwoAlerts() {
         createTestLocation()
 
         def alertToPostpone = someAlert(brisbaneTimeWithDeviation(0, -1))
@@ -101,7 +101,7 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
         assert underTest.getTriggeredAlerts().size() == 2
 
         // now we'll postpone one alert
-        underTest.postponeAlertForTomorrow(alertToPostpone)
+        underTest.postponeAlertForTomorrow([alertToPostpone])
 
         // second alert will still trigger
         def triggered = underTest.getTriggeredAlerts()

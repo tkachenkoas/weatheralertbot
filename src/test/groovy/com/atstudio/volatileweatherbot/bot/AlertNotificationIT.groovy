@@ -51,11 +51,9 @@ class AlertNotificationIT extends AbstractTestNGSpringContextTests {
         updateHandler.handle(getPlainMessageUpdate("/subscribe"))
         // City
         updateHandler.handle(getPlainMessageUpdate("Brisbane"))
-
-        // adjust alert to current time so that it triggers
-        LocalTime currentBrisbaneLocalTime = LocalTime.now(ZoneId.of("Australia/Brisbane"))
-        named.update("update t_weather_alerts set alert_time=:time", ['time': currentBrisbaneLocalTime] as Map)
-
+        // Time
+        LocalTime currentBrisbaneTime = LocalTime.now(ZoneId.of("Australia/Brisbane"))
+        updateHandler.handle(getPlainMessageUpdate("${currentBrisbaneTime.getHour()}:${currentBrisbaneTime.getMinute() - 1}"))
         sleep(3000)
 
         def sentMessages = executedMethods.collect({ (it as SendMessage).getText() + "\n" })

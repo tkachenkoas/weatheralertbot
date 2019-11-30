@@ -53,7 +53,10 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
         Location location = toLocation(initDto.getCity());
         locationRepository.createIfNotExists(location);
         WeatherAlert alert = alertRepository.save(toWeatherAlert(initDto));
-        if (LocalTime.now(location.getTimeZone()).isAfter(alert.getLocalAlertTime())) {
+        // If an alert is created for approximately current time, it'll have it's chance
+        boolean alertTimeHasPassed = LocalTime.now(location.getTimeZone()).minusMinutes(5)
+                .isAfter(alert.getLocalAlertTime());
+        if (alertTimeHasPassed) {
             alertRepository.postponeAlertForTomorrow(singletonList(alert));
         }
         executor.execute(
@@ -74,7 +77,7 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
         return WeatherAlert.builder()
                 .chatId(initDto.getChatId())
                 .locationCode(initDto.getCity().getCode())
-                .localAlertTime(LocalTime.of(8, 0))
+                .localAlertTime(initDto.getAlertLocalTime())
                 .alertWeatherType(initDto.getAlertWeatherType())
                 .locationLabel(initDto.getCity().getShortName())
                 .build();
