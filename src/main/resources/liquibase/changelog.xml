@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <include file="weather-alerts.xml" relativeToChangelogFile="true"/>
     <include file="locations.xml" relativeToChangelogFile="true"/>
+    <include file="weather-alerts.xml" relativeToChangelogFile="true"/>
     <include file="weather-forecasts.xml" relativeToChangelogFile="true"/>
     <include file="forecast-details.xml" relativeToChangelogFile="true"/>
 

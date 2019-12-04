@@ -29,7 +29,7 @@ public class OpenWeatherMapApiAccessorImpl implements OpenWeatherMapApiAccessor 
     @LogArgsAndResult
     public ForecastInformation<HourlyForecast> getHourlyForecast(Location location) {
         this.rateLimiter.acquire();
-         HourlyForecastQuery query = QueryBuilderPicker.pick()
+        HourlyForecastQuery query = QueryBuilderPicker.pick()
                 .forecast()
                 .hourly()
                 .byGeographicCoordinates(
@@ -38,6 +38,7 @@ public class OpenWeatherMapApiAccessorImpl implements OpenWeatherMapApiAccessor 
                                 location.getLat().toPlainString()
                         )
                 )
+                .count(6)
                 .language(Language.ENGLISH)
                 .responseFormat(ResponseFormat.JSON)
                 .unitFormat(UnitFormat.METRIC)

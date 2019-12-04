@@ -18,11 +18,10 @@ public class VolatileWeatherBot extends TelegramLongPollingBot {
 
     private final UpdateHandler handler;
 
-    @Qualifier("update")
     private final TaskExecutor updateExecutor;
 
     @Autowired
-    public VolatileWeatherBot(UpdateHandler handler, TaskExecutor updateExecutor) {
+    public VolatileWeatherBot(UpdateHandler handler, @Qualifier("update") TaskExecutor updateExecutor) {
         this.handler = handler;
         this.updateExecutor = updateExecutor;
     }
