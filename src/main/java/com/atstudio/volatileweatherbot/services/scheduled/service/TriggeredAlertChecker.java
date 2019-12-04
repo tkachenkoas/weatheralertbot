@@ -46,6 +46,7 @@ public class TriggeredAlertChecker {
     @Scheduled(fixedRateString = "${scheduled.check-triggered.delay}")
     public void checkTriggeredAlerts() {
         List<WeatherAlert> upcomingAlerts = alertRepository.getTriggeredAlerts();
+        log.debug("Started triggered alert checker job. Upcoming alerts count: {}", upcomingAlerts.size());
         if (upcomingAlerts.isEmpty()) {
             return;
         }

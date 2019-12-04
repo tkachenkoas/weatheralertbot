@@ -26,7 +26,7 @@ public class LogArgumentsAspect {
         log.info("Executing method {}, method arguments are: ", joinPoint.toShortString());
         int index = 0;
         for (Object arg: joinPoint.getArgs()) {
-            log.info("Arg #{}: {}", ++index, gson.toJson(arg));
+            log.info("Arg #{}: {}", ++index, asLogString(arg));
         }
     }
 
@@ -38,7 +38,11 @@ public class LogArgumentsAspect {
         if (result == null) {
             return;
         }
-        log.info("Method execution result is {}", result);
+        log.info("Method execution result is {}", asLogString(result));
+    }
+
+    private String asLogString(Object obj) {
+        return gson.toJson(obj);
     }
 
 }

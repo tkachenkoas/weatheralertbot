@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.atstudio.volatileweatherbot.repository.RepoJdbcUtils.toTimeStamp;
 import static com.atstudio.volatileweatherbot.repository.columns.EntityColumns.colName;
@@ -36,7 +37,7 @@ public class ForecastRefreshDaoImpl extends AbstractJdbcRepository implements Fo
     }
 
     @Override
-    public List<Location> getLocationsForForecastRefresh() {
+    public Set<Location> getLocationsForForecastRefresh() {
         String locationColumns = joinColumnNames(",", "loc.", LocationColumns.values());
 
         StringBuilder queryBuilder = new StringBuilder()
@@ -51,11 +52,11 @@ public class ForecastRefreshDaoImpl extends AbstractJdbcRepository implements Fo
                         colName(TIMEZONE), colName(ALERT_TIME), BEFORE_ALERT_PERIOD.toHours()))
                 .append(format(" AND frk.%1$s IS NULL OR :now - frk.%1$s > interval '%2$d' hour \n", colName(UPDATE_TIME), FORECAST_REFRESH_PERIOD.toHours()));
 
-        return jdbcTemplate.query(
+        return new HashSet<>(jdbcTemplate.query(
                 queryBuilder.toString(),
                 singletonMap("now", toTimeStamp(Instant.now())),
                 locationRowMapper
-        );
+        ));
     }
 
     static RowMapper<Location> locationRowMapper = (resultSet, i) -> {
