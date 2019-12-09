@@ -7,8 +7,12 @@ import java.util.List;
 public interface AlertRepository {
 
     WeatherAlert save(WeatherAlert alert);
-    List<WeatherAlert> getForLocation(String locationCode);
+
+    boolean removeByUuid(String uuid);
+
+    List<WeatherAlert> getAlertsForChatId(Long chatId);
 
     List<WeatherAlert> getTriggeredAlerts();
-    void postponeAlertForTomorrow(List<WeatherAlert> alert);
+
+    void postponeAlertsForTomorrow(List<WeatherAlert> alert);
 }

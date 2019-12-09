@@ -87,7 +87,7 @@ public class TriggeredAlertChecker {
                     );
                 }
             }
-            alertRepository.postponeAlertForTomorrow(alertsToPostpone);
+            alertRepository.postponeAlertsForTomorrow(alertsToPostpone);
         } finally {
             ChatAlertContext.clear();
         }

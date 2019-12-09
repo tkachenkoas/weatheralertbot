@@ -1,6 +1,7 @@
 package com.atstudio.volatileweatherbot.bot;
 
 import com.atstudio.volatileweatherbot.aspect.LogArgsAndResult;
+import com.atstudio.volatileweatherbot.services.updateprocessors.DefaultUpdateProcessor;
 import com.atstudio.volatileweatherbot.services.updateprocessors.UpdateProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ import java.util.List;
 public class UpdateHandler {
 
     private final List<UpdateProcessor> processors;
+    private final DefaultUpdateProcessor defaultUpdateProcessor;
 
     @Autowired
-    public UpdateHandler(List<UpdateProcessor> processors) {
+    public UpdateHandler(List<UpdateProcessor> processors, DefaultUpdateProcessor defaultUpdateProcessor) {
         this.processors = processors;
+        this.defaultUpdateProcessor = defaultUpdateProcessor;
     }
 
     @LogArgsAndResult
@@ -27,6 +30,7 @@ public class UpdateHandler {
                 return;
             }
         }
+        defaultUpdateProcessor.handle(update);
     }
 
 }

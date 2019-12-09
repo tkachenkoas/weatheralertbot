@@ -57,7 +57,7 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
         boolean alertTimeHasPassed = LocalTime.now(location.getTimeZone()).minusMinutes(5)
                 .isAfter(alert.getLocalAlertTime());
         if (alertTimeHasPassed) {
-            alertRepository.postponeAlertForTomorrow(singletonList(alert));
+            alertRepository.postponeAlertsForTomorrow(singletonList(alert));
         }
         executor.execute(
                 new SendMessage(

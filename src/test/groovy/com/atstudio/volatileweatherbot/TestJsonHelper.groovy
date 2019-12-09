@@ -37,6 +37,12 @@ class TestJsonHelper {
         return update
     }
 
+    static Update getUpdateWithCallBack(String callbackData) {
+        def update = getUpdateFromFile('with-callback-update.json')
+        update.getCallbackQuery().data = callbackData
+        return update
+    }
+
     static Update getUpdateFromFile(String fileName) {
         return slurper.parse(
                 this.getResourceAsStream("/jsonmocks/telegram/${fileName}") as InputStream

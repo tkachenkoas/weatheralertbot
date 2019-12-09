@@ -33,17 +33,28 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    void willSaveAndRetrieveAlert() {
+    void willSaveAndRetrieveForChat() {
         template.update("INSERT INTO t_locations (code, lat, lng, timezone) values ('${CITY_CODE}', 10, 15, 'Europe/Moscow')")
 
         WeatherAlert alert = someAlert()
 
         underTest.save(alert)
 
-        List<WeatherAlert> stored = underTest.getForLocation(CITY_CODE)
+        List<WeatherAlert> stored = underTest.getAlertsForChatId(alert.getChatId())
 
         assert stored.size() == 1
         assert stored[0] == alert
+    }
+
+    @Test
+    void willRemoveAlert() {
+        template.update("INSERT INTO t_locations (code, lat, lng, timezone) values ('${CITY_CODE}', 10, 15, 'Europe/Moscow')")
+
+        WeatherAlert alert = someAlert()
+        underTest.save(alert)
+
+        assert underTest.removeByUuid(alert.getUuid())
+        assert underTest.getAlertsForChatId(alert.getChatId()).size() == 0
     }
 
     @Test
@@ -81,7 +92,7 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
         assert underTest.getTriggeredAlerts().size() == 2
 
         // when
-        underTest.postponeAlertForTomorrow([alert1, alert2])
+        underTest.postponeAlertsForTomorrow([alert1, alert2])
 
         // then
         def triggered = underTest.getTriggeredAlerts()
@@ -101,7 +112,7 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
         assert underTest.getTriggeredAlerts().size() == 2
 
         // now we'll postpone one alert
-        underTest.postponeAlertForTomorrow([alertToPostpone])
+        underTest.postponeAlertsForTomorrow([alertToPostpone])
 
         // second alert will still trigger
         def triggered = underTest.getTriggeredAlerts()

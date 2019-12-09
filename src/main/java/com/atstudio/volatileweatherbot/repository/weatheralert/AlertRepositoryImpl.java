@@ -31,14 +31,23 @@ public class AlertRepositoryImpl extends AbstractJdbcRepository<WeatherAlert> im
     }
 
     @Override
-    public List<WeatherAlert> getForLocation(String locationCode) {
+    public List<WeatherAlert> getAlertsForChatId(Long chatId) {
         return jdbcTemplate.query(
                 " SELECT " + joinColumnNames(",", WeatherAlertColumns.values()) +
                         " FROM " + WEATHER_ALERTS_TABLE +
-                        " WHERE " + colName(ALERT_LOCATION_CODE) + "=:locationCode",
-                singletonMap("locationCode", locationCode),
+                        " WHERE " + colName(CHAT_ID) + "=:chatId",
+                singletonMap("chatId", chatId),
                 rowMapper
         );
+    }
+
+    @Override
+    public boolean removeByUuid(String uuid) {
+        return jdbcTemplate.update(
+                " DELETE FROM " + WEATHER_ALERTS_TABLE +
+                        " WHERE " + colName(UUID) + "=:uuid",
+                singletonMap("uuid", uuid)
+        ) == 1;
     }
 
     @Override
@@ -63,7 +72,7 @@ public class AlertRepositoryImpl extends AbstractJdbcRepository<WeatherAlert> im
     }
 
     @Override
-    public void postponeAlertForTomorrow(List<WeatherAlert> alerts) {
+    public void postponeAlertsForTomorrow(List<WeatherAlert> alerts) {
         if (alerts.isEmpty()) {
             return;
         }
