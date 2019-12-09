@@ -78,7 +78,7 @@ public class SaveAlertStageProcessor extends AbstractInitStageProcessor {
                 .chatId(initDto.getChatId())
                 .locationCode(initDto.getCity().getCode())
                 .localAlertTime(initDto.getAlertLocalTime())
-                .alertWeatherType(initDto.getAlertWeatherType())
+                .weatherType(initDto.getWeatherType())
                 .locationLabel(initDto.getCity().getShortName())
                 .build();
     }

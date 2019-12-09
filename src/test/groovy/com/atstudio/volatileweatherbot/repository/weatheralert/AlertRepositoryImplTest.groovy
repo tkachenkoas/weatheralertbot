@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.repository.weatheralert
 
-import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType
+import com.atstudio.volatileweatherbot.models.domain.WeatherType
 import com.atstudio.volatileweatherbot.models.domain.WeatherAlert
 import com.atstudio.volatileweatherbot.repository.RepoConfig
 import org.springframework.beans.factory.annotation.Autowired
@@ -116,7 +116,7 @@ class AlertRepositoryImplTest extends AbstractTestNGSpringContextTests {
     static WeatherAlert someAlert(LocalTime targetTime = LocalTime.of(8,0)) {
         return [
                 chatId          : 123L,
-                alertWeatherType : AlertWeatherType.RAIN,
+                weatherType     : WeatherType.RAIN,
                 locationLabel   : 'city',
                 locationCode    : CITY_CODE,
                 localAlertTime  : targetTime

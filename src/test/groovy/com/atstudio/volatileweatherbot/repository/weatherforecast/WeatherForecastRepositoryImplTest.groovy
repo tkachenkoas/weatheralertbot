@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.repository.weatherforecast
 
-import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType
+import com.atstudio.volatileweatherbot.models.domain.WeatherType
 import com.atstudio.volatileweatherbot.models.domain.forecast.ForecastDetails
 import com.atstudio.volatileweatherbot.models.domain.forecast.RainInfo
 import com.atstudio.volatileweatherbot.models.domain.forecast.WeatherForecast
@@ -112,7 +112,7 @@ class WeatherForecastRepositoryImplTest extends AbstractTestNGSpringContextTests
         Random rnd = ThreadLocalRandom.current();
         return [
                 targetDateTime      : dateTime,
-                expectedWeatherType : AlertWeatherType.RAIN,
+                expectedWeatherType : WeatherType.RAIN,
                 temperature         : rnd.nextInt(20, 30) as BigDecimal,
                 temperatureDeviation: rnd.nextInt(2, 4) as BigDecimal,
                 rainInfo            : new RainInfo(

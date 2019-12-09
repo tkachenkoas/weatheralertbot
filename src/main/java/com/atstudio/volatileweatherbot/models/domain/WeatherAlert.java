@@ -14,7 +14,7 @@ import java.time.LocalTime;
 public class WeatherAlert {
     private String uuid;
     private Long chatId;
-    private AlertWeatherType alertWeatherType;
+    private WeatherType weatherType;
     private String locationLabel;
     private String locationCode;
     private LocalTime localAlertTime;

@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.models.dto;
 
-import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType;
+import com.atstudio.volatileweatherbot.models.domain.WeatherType;
 import lombok.Data;
 
 import java.time.LocalTime;
@@ -13,7 +13,7 @@ public class AlertInitDto {
     private List<CityDto> matchedCities;
     private CityDto city;
 
-    private AlertWeatherType alertWeatherType;
+    private WeatherType weatherType;
     private LocalTime alertLocalTime;
 
     private InitStage stage;
@@ -22,7 +22,7 @@ public class AlertInitDto {
     public AlertInitDto(Long chatId) {
         alertLocalTime = LocalTime.of(8, 0);
         this.chatId = chatId;
-        this.alertWeatherType = AlertWeatherType.RAIN;
+        this.weatherType = WeatherType.RAIN;
         nextStage();
     }
 

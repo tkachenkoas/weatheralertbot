@@ -1,7 +1,7 @@
 package com.atstudio.volatileweatherbot.services.scheduled
 
 import com.atstudio.volatileweatherbot.TestJsonHelper
-import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType
+import com.atstudio.volatileweatherbot.models.domain.WeatherType
 import com.atstudio.volatileweatherbot.models.domain.Location
 import com.atstudio.volatileweatherbot.models.domain.forecast.WeatherForecast
 import com.atstudio.volatileweatherbot.services.external.weather.OpenWeatherMapApiAccessor
@@ -52,7 +52,7 @@ class OpenWeatherMapForecastProviderTest {
         def first = details[0]
 
         assert first.getTargetDateTime() == of(2019, Month.NOVEMBER, 14, 7, 00, 00)
-        assert first.getExpectedWeatherType() == AlertWeatherType.OTHER
+        assert first.getExpectedWeatherType() == WeatherType.OTHER
 
         assert first.getRainInfo() == null
 
@@ -61,7 +61,7 @@ class OpenWeatherMapForecastProviderTest {
         assert last.getTemperatureDeviation() == 0
 
         assert last.getTargetDateTime() == of(2019, Month.NOVEMBER, 14, 22, 00, 00)
-        assert last.getExpectedWeatherType() == AlertWeatherType.RAIN
+        assert last.getExpectedWeatherType() == WeatherType.RAIN
 
         def rain = last.getRainInfo()
         assert rain.getExpectedAmount() == 0.13

@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.models.domain.forecast;
 
-import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType;
+import com.atstudio.volatileweatherbot.models.domain.WeatherType;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ForecastDetails {
 
     private LocalDateTime targetDateTime;
-    private AlertWeatherType expectedWeatherType;
+    private WeatherType expectedWeatherType;
     private BigDecimal temperature;
     private BigDecimal temperatureDeviation;
     private RainInfo rainInfo;

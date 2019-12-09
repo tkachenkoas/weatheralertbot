@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.services.scheduled.service.weatheralert;
 
-import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType;
+import com.atstudio.volatileweatherbot.models.domain.WeatherType;
 import com.atstudio.volatileweatherbot.models.domain.WeatherAlert;
 import com.atstudio.volatileweatherbot.models.domain.forecast.ForecastDetails;
 import com.atstudio.volatileweatherbot.models.domain.forecast.WeatherForecast;
@@ -25,12 +25,12 @@ public class RainForecastToAlertMatchProcessor implements ForecastToAlertMatchPr
 
     @Override
     public void checkCurrentForecastForAlertMatch(WeatherAlert alert, WeatherForecast currentForecast) {
-        if (alert.getAlertWeatherType() != AlertWeatherType.RAIN) {
+        if (alert.getWeatherType() != WeatherType.RAIN) {
             return;
         }
         List<String> hourlyRainAmount = new ArrayList<>();
         for (ForecastDetails details : currentForecast.getDetails()) {
-            if (details.getExpectedWeatherType() != AlertWeatherType.RAIN) {
+            if (details.getExpectedWeatherType() != WeatherType.RAIN) {
                 continue;
             }
 

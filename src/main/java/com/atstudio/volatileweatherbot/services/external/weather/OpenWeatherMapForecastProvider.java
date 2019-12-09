@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.services.external.weather;
 
-import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType;
+import com.atstudio.volatileweatherbot.models.domain.WeatherType;
 import com.atstudio.volatileweatherbot.models.domain.Location;
 import com.atstudio.volatileweatherbot.models.domain.forecast.ForecastDetails;
 import com.atstudio.volatileweatherbot.models.domain.forecast.RainInfo;
@@ -75,9 +75,9 @@ public class OpenWeatherMapForecastProvider implements WeatherForecastProvider {
                             forecast.getWeather().get(0).getDescription()
                     )
             );
-            details.setExpectedWeatherType(AlertWeatherType.RAIN);
+            details.setExpectedWeatherType(WeatherType.RAIN);
         } else {
-            details.setExpectedWeatherType(AlertWeatherType.OTHER);
+            details.setExpectedWeatherType(WeatherType.OTHER);
         }
         return details;
     }

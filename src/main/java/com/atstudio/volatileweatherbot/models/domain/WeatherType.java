@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.models.domain;
 
-public enum AlertWeatherType {
+public enum WeatherType {
     OTHER,
     RAIN
 }

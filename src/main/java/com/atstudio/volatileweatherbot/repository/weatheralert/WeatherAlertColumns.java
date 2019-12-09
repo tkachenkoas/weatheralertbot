@@ -1,6 +1,6 @@
 package com.atstudio.volatileweatherbot.repository.weatheralert;
 
-import com.atstudio.volatileweatherbot.models.domain.AlertWeatherType;
+import com.atstudio.volatileweatherbot.models.domain.WeatherType;
 import com.atstudio.volatileweatherbot.models.domain.WeatherAlert;
 import com.atstudio.volatileweatherbot.repository.columns.EntityColumns;
 import com.atstudio.volatileweatherbot.repository.columns.PropSetter;
@@ -13,8 +13,8 @@ public enum WeatherAlertColumns implements EntityColumns<WeatherAlert> {
     UUID("uuid", WeatherAlert::getUuid, (obj, rs, col) -> obj.setUuid(rs.getString(col))),
     CHAT_ID("chat_id", WeatherAlert::getChatId, (obj, rs, col) -> obj.setChatId(rs.getLong(col))),
     ALERT_TYPE("alert_type",
-            alert -> alert.getAlertWeatherType().name(),
-            (obj, rs, col) -> obj.setAlertWeatherType(AlertWeatherType.valueOf(rs.getString(col)))
+            alert -> alert.getWeatherType().name(),
+            (obj, rs, col) -> obj.setWeatherType(WeatherType.valueOf(rs.getString(col)))
     ),
     ALERT_LOCATION_CODE("location_code", WeatherAlert::getLocationCode, (obj, rs, col) -> obj.setLocationCode(rs.getString(col))),
     LOCATION_LABEL("location_label", WeatherAlert::getLocationLabel, (obj, rs, col) -> obj.setLocationLabel(rs.getString(col))),
