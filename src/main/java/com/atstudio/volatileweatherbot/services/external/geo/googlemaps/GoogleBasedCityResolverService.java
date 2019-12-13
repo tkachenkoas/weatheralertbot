@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.assertj.core.util.Arrays.asList;
 
 @Service
 @Slf4j
