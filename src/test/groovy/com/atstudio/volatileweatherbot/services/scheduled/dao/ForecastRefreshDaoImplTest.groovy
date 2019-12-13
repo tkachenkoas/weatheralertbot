@@ -53,6 +53,15 @@ class ForecastRefreshDaoImplTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
+    void willGetLocationsWhenAlertHasPassed() {
+        seedLocationAndAlert(brisbaneTimeWithDeviation(0, -1))
+        def locations = underTest.getLocationsForForecastRefresh()
+        assert locations.size() == 1
+        def location = locations[0]
+        assert location == new Location(CITY_CODE, 12 as BigDecimal, 15 as BigDecimal, ZoneId.of(BRISBANE_TIMEZONE))
+    }
+
+    @Test
     void wontGetLocationsWhenAlertIsLaterThanOneHour() {
         seedLocationAndAlert(brisbaneTimeWithDeviation(1, 01))
         def result = underTest.getLocationsForForecastRefresh()

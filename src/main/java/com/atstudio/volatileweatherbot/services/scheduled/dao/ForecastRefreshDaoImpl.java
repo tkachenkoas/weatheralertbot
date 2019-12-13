@@ -46,11 +46,14 @@ public class ForecastRefreshDaoImpl extends AbstractJdbcRepository implements Fo
                         WEATHER_ALERTS_TABLE, colName(LOCATION_CODE), colName(ALERT_LOCATION_CODE)))
                 .append(format(" LEFT JOIN %s frk ON ( frk.%s = loc.%s \n",
                         WEATHER_FORECAST_TABLE, colName(FORECAST_LOCATION_CODE), colName(LOCATION_CODE)))
-                .append(format(" AND frk.%1$s = (SELECT MAX(%1$s) from %3$s WHERE %2$s = loc.%4$s) )",
+                .append(format(" AND frk.%1$s = (SELECT MAX(%1$s) from %3$s WHERE %2$s = loc.%4$s) ) \n",
                         colName(UPDATE_TIME), colName(FORECAST_LOCATION_CODE), WEATHER_FORECAST_TABLE, colName(LOCATION_CODE)))
-                .append(format(" WHERE al.%2$s - timezone(loc.%1$s, :now)::time < interval '%3$d' hour \n",
+                .append(format(" WHERE (al.%2$s - timezone(loc.%1$s, :now)::time between interval '-1' hour and interval '%3$d' hour \n",
                         colName(TIMEZONE), colName(ALERT_TIME), BEFORE_ALERT_PERIOD.toHours()))
-                .append(format(" AND frk.%1$s IS NULL OR :now - frk.%1$s > interval '%2$d' hour \n", colName(UPDATE_TIME), FORECAST_REFRESH_PERIOD.toHours()));
+                .append(format(" OR al.%2$s - timezone(loc.%1$s, :now)::time < interval '-%3$d' hour )\n",
+                        colName(TIMEZONE), colName(ALERT_TIME), 24 - BEFORE_ALERT_PERIOD.toHours()))
+                .append(format(" AND frk.%1$s IS NULL OR :now - frk.%1$s > interval '%2$d' hour \n",
+                        colName(UPDATE_TIME), FORECAST_REFRESH_PERIOD.toHours()));
 
         return new HashSet<>(jdbcTemplate.query(
                 queryBuilder.toString(),
