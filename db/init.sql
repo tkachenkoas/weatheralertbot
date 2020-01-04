@@ -1,0 +1,6 @@
+CREATE USER test;
+CREATE DATABASE weatherbot;
+GRANT ALL PRIVILEGES ON DATABASE weatherbot TO test;
+
+CREATE DATABASE weatherbottest;
+GRANT ALL PRIVILEGES ON DATABASE weatherbottest TO test;

@@ -17,3 +17,6 @@ conf/
 
 ### Logs ###
 **/logfile.log*
+**/weather_alert_bot.log*
+
+dbdata

@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  db:
+    build:
+      context: ./db
+    ports:
+      - 5435:5432
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+  app_dev:
+    build:
+      context: ./bot
+    entrypoint:
+      - /bin/bash
+      - --
+      - /app/start.sh
+    volumes:
+      - $HOME/.m2:/root/.m2
+      - ./bot:/app
+    working_dir: /app
+    depends_on:
+      - db
+  app_test:
+    build:
+      context: ./bot
+    entrypoint:
+      - /bin/bash
+      - --
+      - /app/test.sh
+    volumes:
+      - $HOME/.m2:/root/.m2
+      - ./bot:/app
+    working_dir: /app
+    depends_on:
+      - db
